@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import AnimatedSkillBubbles from "@/components/AnimatedSkillBubbles";
 
 interface Skill {
   name: string;
@@ -109,6 +110,7 @@ const SkillsSection = () => {
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>(skills);
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [showBubbles, setShowBubbles] = useState(false);
 
   useEffect(() => {
     if (activeCategory === "All") {
@@ -134,10 +136,16 @@ const SkillsSection = () => {
       observer.observe(section);
     }
 
+    // Show animated bubbles after a delay
+    const timer = setTimeout(() => {
+      setShowBubbles(true);
+    }, 1500);
+
     return () => {
       if (section) {
         observer.disconnect();
       }
+      clearTimeout(timer);
     };
   }, []);
 
@@ -160,6 +168,11 @@ const SkillsSection = () => {
           </p>
         </div>
         
+        {/* Interactive skill bubbles */}
+        <div className={`mb-16 transition-all duration-1000 ${showBubbles ? 'opacity-100' : 'opacity-0'}`}>
+          <AnimatedSkillBubbles />
+        </div>
+        
         {/* Moving tech words background */}
         <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none select-none">
           <div className="animate-marquee whitespace-nowrap text-4xl font-bold text-primary">
@@ -172,6 +185,7 @@ const SkillsSection = () => {
           </div>
         </div>
         
+        {/* Category filters */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((category) => (
             <button
@@ -191,6 +205,7 @@ const SkillsSection = () => {
           ))}
         </div>
         
+        {/* Skill cards grid */}
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {filteredSkills.map((skill, index) => (
             <HoverCard key={skill.name} open={hoveredSkill === skill.name}>

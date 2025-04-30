@@ -8,6 +8,9 @@ import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import FooterCursor from "@/components/FooterCursor";
+import AnimatedSvgElements from "@/components/AnimatedSvgElements";
+import ScrollTriggeredElement from "@/components/ScrollTriggeredElement";
+import FloatingCodeSnippet from "@/components/FloatingCodeSnippet";
 import { useEffect } from "react";
 
 const Index = () => {
@@ -57,6 +60,13 @@ const Index = () => {
       <TestimonialsSection />
       <ContactSection />
       <Footer />
+      
+      {/* Interactive elements */}
+      <AnimatedSvgElements />
+      <ScrollTriggeredElement position="left" offset={0} />
+      <ScrollTriggeredElement position="right" offset={1} />
+      <ScrollTriggeredElement position="left" offset={2} />
+      <FloatingCodeSnippet />
       
       {/* Background particles */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">

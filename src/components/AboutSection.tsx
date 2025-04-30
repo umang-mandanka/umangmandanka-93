@@ -1,6 +1,7 @@
 
 import { Card, CardContent } from "@/components/ui/card";
 import useScrollReveal from "@/hooks/useScrollReveal";
+import TiltProfileImage from "@/components/TiltProfileImage";
 
 const AboutSection = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.2 });
@@ -22,18 +23,7 @@ const AboutSection = () => {
           >
             <div className="relative">
               <div className="bg-gradient-to-tr from-primary to-primary/50 absolute -inset-4 rounded-xl blur-xl"></div>
-              <div className="relative bg-card rounded-xl overflow-hidden aspect-square max-w-md mx-auto">
-                <img 
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
-                  alt="Umang Mandnaka" 
-                  className="w-full h-full object-cover hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 flex items-end">
-                  <div className="p-6">
-                    <p className="text-white text-lg font-medium">Let's build something amazing together!</p>
-                  </div>
-                </div>
-              </div>
+              <TiltProfileImage imageUrl="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" />
               
               {/* Floating elements */}
               <div className="absolute -top-6 -right-6 w-20 h-20 bg-primary/10 rounded-lg rotate-12 animate-float"></div>
