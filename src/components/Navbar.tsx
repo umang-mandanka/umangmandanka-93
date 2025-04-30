@@ -1,11 +1,13 @@
 
-import { useState, useEffect } from "react";
-import { Moon, Sun } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Menu, Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -31,25 +33,58 @@ const Navbar = () => {
     }
   }, [darkMode]);
 
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(event.target as Node)) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  const navLinks = [
+    { name: 'Home', href: '#home' },
+    { name: 'About', href: '#about' },
+    { name: 'Projects', href: '#projects' },
+    { name: 'Skills', href: '#skills' },
+    { name: 'Testimonials', href: '#testimonials' },
+    { name: 'Contact', href: '#contact' },
+  ];
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
     <nav 
-      className={`fixed w-full z-50 transition-all duration-300 ${
+      ref={navRef}
+      className={`fixed w-full z-50 transition-all duration-500 ${
         isScrolled 
-        ? "py-2 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm" 
+        ? "py-2 glass-effect shadow-lg" 
         : "py-4 bg-transparent"
       }`}
     >
       <div className="container mx-auto px-4 flex justify-between items-center">
-        <a href="#" className="text-2xl font-bold text-primary">
-          <span className="font-light">U</span>mang
+        <a href="#" className="text-2xl font-bold relative">
+          <span className="font-light text-primary">U</span>mang
+          <span className="absolute -bottom-1 left-0 w-0 group-hover:w-full h-0.5 bg-primary transition-all duration-300"></span>
         </a>
         
         <div className="hidden md:flex space-x-8">
-          <a href="#home" className="hover:text-primary transition-colors">Home</a>
-          <a href="#about" className="hover:text-primary transition-colors">About</a>
-          <a href="#projects" className="hover:text-primary transition-colors">Projects</a>
-          <a href="#skills" className="hover:text-primary transition-colors">Skills</a>
-          <a href="#contact" className="hover:text-primary transition-colors">Contact</a>
+          {navLinks.map((link) => (
+            <a 
+              key={link.name}
+              href={link.href} 
+              className="relative group overflow-hidden"
+            >
+              <span className="relative z-10">{link.name}</span>
+              <span className="absolute bottom-0 left-0 w-full h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
+            </a>
+          ))}
         </div>
         
         <div className="flex items-center gap-4">
@@ -58,13 +93,57 @@ const Navbar = () => {
             size="icon"
             onClick={() => setDarkMode(!darkMode)}
             aria-label="Toggle dark mode"
+            className="relative overflow-hidden rounded-full"
           >
-            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span className="absolute inset-0 bg-primary/10 scale-0 hover:scale-100 transition-transform duration-300 rounded-full"></span>
+            <span className="relative z-10">
+              {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            </span>
           </Button>
           
-          <Button className="hidden md:flex">
-            Resume
+          <a href="/resume.pdf" target="_blank" rel="noopener noreferrer">
+            <Button className="hidden md:flex relative overflow-hidden group">
+              <span className="relative z-10">Resume</span>
+              <span className="absolute inset-0 bg-primary/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+            </Button>
+          </a>
+          
+          <Button 
+            variant="ghost" 
+            size="icon" 
+            className="md:hidden"
+            onClick={toggleMobileMenu}
+          >
+            <Menu />
           </Button>
+        </div>
+      </div>
+      
+      {/* Mobile menu */}
+      <div 
+        className={`md:hidden absolute top-full left-0 w-full glass-effect shadow-lg py-4 transition-all duration-300 ${
+          isMobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'
+        }`}
+      >
+        <div className="container mx-auto px-4 flex flex-col space-y-4">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.href} 
+              className="py-2 px-4 hover:bg-primary/10 rounded-md transition-colors"
+              onClick={() => setIsMobileMenuOpen(false)}
+            >
+              {link.name}
+            </a>
+          ))}
+          <a 
+            href="/resume.pdf" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="py-2 px-4 bg-primary/10 rounded-md text-primary"
+          >
+            Resume
+          </a>
         </div>
       </div>
     </nav>

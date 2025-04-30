@@ -19,7 +19,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Code, ArrowRight } from "lucide-react";
+import { Code, ArrowRight, ExternalLink, Github } from "lucide-react";
+import useScrollReveal from "@/hooks/useScrollReveal";
 
 interface Project {
   id: number;
@@ -78,6 +79,7 @@ const projects: Project[] = [
 const ProjectSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
 
   const handleOpenProject = (project: Project) => {
     setSelectedProject(project);
@@ -85,8 +87,12 @@ const ProjectSection = () => {
   };
 
   return (
-    <section id="projects" className="py-20 bg-muted/30">
-      <div className="container mx-auto px-4">
+    <section id="projects" className="py-20 bg-muted/30 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute w-full h-full top-0 left-0 bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/5%),transparent_70%)]"></div>
+      <div className="absolute w-full h-full top-0 left-0 bg-[radial-gradient(circle_at_bottom_left,hsl(var(--primary)/5%),transparent_70%)]"></div>
+      
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-2">My Projects</h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
@@ -95,14 +101,22 @@ const ProjectSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
-          {projects.map((project) => (
-            <Card key={project.id} className="overflow-hidden hover:shadow-lg transition-all duration-300 group">
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+          {projects.map((project, index) => (
+            <Card 
+              key={project.id} 
+              className="overflow-hidden hover:shadow-lg transition-all duration-500 group card-shine"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
+                transition: `all 0.7s cubic-bezier(0.17, 0.55, 0.55, 1) ${index * 0.2}s`
+              }}
+            >
               <div className="h-56 overflow-hidden">
                 <img 
                   src={project.image} 
                   alt={project.title} 
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
               </div>
               <CardHeader>
@@ -112,23 +126,29 @@ const ProjectSection = () => {
               <CardContent>
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.tags.map((tag) => (
-                    <Badge key={tag} variant="outline">{tag}</Badge>
+                    <Badge key={tag} variant="outline" className="bg-primary/5">{tag}</Badge>
                   ))}
                 </div>
               </CardContent>
               <CardFooter className="flex justify-between">
-                <Button variant="outline" size="sm" onClick={() => handleOpenProject(project)}>
-                  View Details
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleOpenProject(project)}
+                  className="relative overflow-hidden group/btn"
+                >
+                  <span className="relative z-10">View Details</span>
+                  <span className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></span>
                 </Button>
                 <div className="flex gap-2">
                   <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
                     <Button variant="ghost" size="sm">
-                      <Code className="h-4 w-4" />
+                      <Github className="h-4 w-4" />
                     </Button>
                   </a>
                   <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
                     <Button variant="ghost" size="sm">
-                      <ArrowRight className="h-4 w-4" />
+                      <ExternalLink className="h-4 w-4" />
                     </Button>
                   </a>
                 </div>
@@ -138,23 +158,23 @@ const ProjectSection = () => {
         </div>
 
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <AlertDialogContent className="max-w-3xl">
+          <AlertDialogContent className="max-w-3xl backdrop-blur-md bg-card/70 border border-primary/20">
             {selectedProject && (
               <>
                 <AlertDialogHeader>
-                  <AlertDialogTitle>{selectedProject.title}</AlertDialogTitle>
+                  <AlertDialogTitle className="text-2xl font-bold">{selectedProject.title}</AlertDialogTitle>
                   <AlertDialogDescription>
                     <div className="my-4">
                       <img 
                         src={selectedProject.image} 
                         alt={selectedProject.title} 
-                        className="w-full h-56 object-cover rounded-md" 
+                        className="w-full h-64 object-cover rounded-md" 
                       />
                     </div>
-                    <p className="text-foreground my-4">{selectedProject.longDescription}</p>
+                    <p className="text-foreground my-4 text-lg">{selectedProject.longDescription}</p>
                     <div className="flex flex-wrap gap-2 my-4">
                       {selectedProject.tags.map((tag) => (
-                        <Badge key={tag} variant="outline">{tag}</Badge>
+                        <Badge key={tag} variant="outline" className="bg-primary/10">{tag}</Badge>
                       ))}
                     </div>
                   </AlertDialogDescription>
@@ -162,17 +182,17 @@ const ProjectSection = () => {
                 <AlertDialogFooter>
                   <div className="flex gap-4 w-full">
                     <AlertDialogAction asChild>
-                      <Button className="w-full">
-                        <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-                          Live Demo
-                        </a>
+                      <Button className="w-full relative overflow-hidden group">
+                        <span className="relative z-10">Live Demo</span>
+                        <span className="absolute inset-0 bg-primary/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                        <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0"></a>
                       </Button>
                     </AlertDialogAction>
                     <AlertDialogAction asChild>
-                      <Button variant="outline" className="w-full">
-                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="w-full">
-                          View Code
-                        </a>
+                      <Button variant="outline" className="w-full relative overflow-hidden group">
+                        <span className="relative z-10">View Code</span>
+                        <span className="absolute inset-0 bg-primary/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
+                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0"></a>
                       </Button>
                     </AlertDialogAction>
                   </div>

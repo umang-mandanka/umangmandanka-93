@@ -112,6 +112,33 @@
   ::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.7);
   }
+
+  /* Custom cursor */
+  .custom-cursor {
+    height: 32px;
+    width: 32px;
+    border-radius: 50%;
+    position: fixed;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    z-index: 9999;
+    mix-blend-mode: difference;
+    transform: translate(-50%, -50%);
+  }
+  
+  .cursor-dot {
+    height: 8px;
+    width: 8px;
+    background-color: hsl(var(--primary));
+  }
+  
+  .cursor-outline {
+    height: 40px;
+    width: 40px;
+    border: 2px solid hsl(var(--primary) / 0.5);
+    transition: transform 0.15s ease-out;
+  }
 }
 
 /* Animations */
@@ -137,4 +164,66 @@
   .dark .glass-effect {
     @apply bg-black/10 backdrop-blur-lg border border-white/10;
   }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/60;
+  }
+
+  .card-shine {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-shine::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      to right, 
+      transparent, 
+      rgba(255, 255, 255, 0.1),
+      transparent
+    );
+    transform: skewX(-25deg);
+    transition: 0.75s;
+  }
+
+  .card-shine:hover::after {
+    left: 150%;
+  }
+
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .parallax {
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+  }
+
+  .parallax-layer {
+    transform: translateZ(0);
+    transition: transform 0.3s ease-out;
+  }
+
+  .parallax-deep {
+    transform: translateZ(-100px);
+  }
+
+  .parallax-medium {
+    transform: translateZ(-50px);
+  }
+
+  .parallax-shallow {
+    transform: translateZ(50px);
+  }
 }
+

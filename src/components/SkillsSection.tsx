@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
 
@@ -108,7 +108,7 @@ const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>(skills);
   const [isVisible, setIsVisible] = useState(false);
-  const sectionRef = useRef<HTMLDivElement>(null);
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
 
   useEffect(() => {
     if (activeCategory === "All") {
@@ -129,23 +129,28 @@ const SkillsSection = () => {
       { threshold: 0.2 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
+    const section = document.getElementById('skills');
+    if (section) {
+      observer.observe(section);
     }
 
     return () => {
-      if (sectionRef.current) {
+      if (section) {
         observer.disconnect();
       }
     };
   }, []);
 
+  const handleSkillHover = (name: string | null) => {
+    setHoveredSkill(name);
+  };
+
   return (
-    <section id="skills" className="py-20 relative overflow-hidden" ref={sectionRef}>
+    <section id="skills" className="py-20 relative overflow-hidden">
       {/* Background elements */}
-      <div className="absolute bottom-0 left-0 w-1/3 h-1/3 bg-secondary/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,hsl(var(--primary)/5%),transparent_70%)]"></div>
       
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-bold mb-2">My Skills</h2>
           <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
@@ -155,49 +160,74 @@ const SkillsSection = () => {
           </p>
         </div>
         
+        {/* Moving tech words background */}
+        <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none select-none">
+          <div className="animate-marquee whitespace-nowrap text-4xl font-bold text-primary">
+            {skills.map(skill => (
+              <span key={skill.name} className="mx-4">{skill.name}</span>
+            ))}
+            {skills.map(skill => (
+              <span key={`repeat-${skill.name}`} className="mx-4">{skill.name}</span>
+            ))}
+          </div>
+        </div>
+        
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((category) => (
             <button
               key={category}
-              className={`px-4 py-2 rounded-full text-sm transition-all ${
+              className={`px-4 py-2 rounded-full text-sm transition-all relative overflow-hidden ${
                 activeCategory === category
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary hover:bg-secondary/70"
               }`}
               onClick={() => setActiveCategory(category)}
             >
-              {category}
+              <span className="relative z-10">{category}</span>
+              {activeCategory !== category && (
+                <span className="absolute inset-0 bg-primary/10 scale-x-0 hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+              )}
             </button>
           ))}
         </div>
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
           {filteredSkills.map((skill, index) => (
-            <HoverCard key={skill.name}>
+            <HoverCard key={skill.name} open={hoveredSkill === skill.name}>
               <HoverCardTrigger asChild>
-                <Card className={`hover:-translate-y-1 transition-all duration-300 ${
-                  isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-                }`} style={{ transitionDelay: `${index * 100}ms` }}>
+                <Card 
+                  className={`hover:-translate-y-2 transition-all duration-300 cursor-pointer perspective ${
+                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+                  }`} 
+                  style={{ transitionDelay: `${index * 100}ms` }}
+                  onMouseEnter={() => handleSkillHover(skill.name)}
+                  onMouseLeave={() => handleSkillHover(null)}
+                >
                   <CardContent className="p-6 flex flex-col items-center">
-                    <img src={skill.icon} alt={skill.name} className="w-16 h-16 mb-4" />
+                    <div className="relative mb-4">
+                      <div className="absolute inset-0 bg-primary/10 rounded-full blur-md"></div>
+                      <img src={skill.icon} alt={skill.name} className="w-16 h-16 relative z-10" />
+                    </div>
                     <h3 className="text-lg font-semibold">{skill.name}</h3>
                     
-                    <div className="w-full mt-4 bg-secondary rounded-full h-2">
+                    <div className="w-full mt-4 bg-secondary rounded-full h-2 overflow-hidden">
                       <div 
-                        className="bg-primary h-2 rounded-full" 
+                        className="bg-primary h-2 rounded-full relative"
                         style={{ 
                           width: isVisible ? `${skill.level}%` : "0%", 
-                          transition: "width 1s ease-in-out" 
+                          transition: "width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)" 
                         }}
-                      ></div>
+                      >
+                        <span className="absolute inset-0 bg-gradient-to-r from-primary/50 via-primary to-primary/50 animate-pulse"></span>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
               </HoverCardTrigger>
-              <HoverCardContent className="w-80">
+              <HoverCardContent className="w-80 backdrop-blur-md bg-card/70 border border-primary/20">
                 <div className="flex justify-between items-center mb-2">
                   <h4 className="font-semibold">{skill.name}</h4>
-                  <span className="text-xs text-muted-foreground">{skill.level}% Proficiency</span>
+                  <span className="text-xs font-mono bg-primary/10 px-2 py-1 rounded-full text-primary">{skill.level}%</span>
                 </div>
                 <p className="text-sm text-muted-foreground">{skill.description}</p>
               </HoverCardContent>
