@@ -5,7 +5,7 @@ interface SvgShape {
   id: number;
   x: number;
   y: number;
-  type: "circle" | "square" | "triangle" | "hexagon";
+  type: "circle" | "square" | "triangle" | "hexagon" | "code" | "bracket" | "curlyBrace" | "tag";
   size: number;
   color: string;
   speed: number;
@@ -20,10 +20,17 @@ const AnimatedSvgElements = () => {
   // Generate random shapes
   useEffect(() => {
     const generatedShapes: SvgShape[] = [];
-    const shapeTypes = ["circle", "square", "triangle", "hexagon"] as const;
-    const colors = ["primary", "secondary", "accent"];
+    const shapeTypes = [
+      "circle", "square", "triangle", "hexagon", "code", "bracket", "curlyBrace", "tag"
+    ] as const;
     
-    for (let i = 0; i < 8; i++) {
+    // Color palette for frontend dev theme
+    const colors = [
+      "text-blue-500", "text-purple-500", "text-cyan-500", "text-emerald-500", 
+      "text-amber-500", "text-rose-500", "text-indigo-500", "text-orange-500"
+    ];
+    
+    for (let i = 0; i < 12; i++) {
       generatedShapes.push({
         id: i,
         x: Math.random() * 100,
@@ -76,7 +83,7 @@ const AnimatedSvgElements = () => {
   
   // Render shape based on type
   const renderShape = (shape: SvgShape) => {
-    const baseClassName = `fill-${shape.color}/20 stroke-${shape.color}/60 stroke-[1.5]`;
+    const baseClassName = `${shape.color}/30 stroke-${shape.color.replace('text-', '')}/60 stroke-[1.5]`;
     
     switch(shape.type) {
       case "circle":
@@ -111,12 +118,57 @@ const AnimatedSvgElements = () => {
           points={hexPoints} 
           className={baseClassName}
         />;
+      case "code":
+        return (
+          <g className={baseClassName}>
+            <text x={0} y={shape.size/2} fontSize={shape.size-5} fontFamily="monospace">&lt;/&gt;</text>
+          </g>
+        );
+      case "bracket":
+        return (
+          <g className={baseClassName}>
+            <text x={2} y={shape.size/1.5} fontSize={shape.size-2} fontFamily="monospace">[ ]</text>
+          </g>
+        );
+      case "curlyBrace":
+        return (
+          <g className={baseClassName}>
+            <text x={2} y={shape.size/1.5} fontSize={shape.size-2} fontFamily="monospace">{ }</text>
+          </g>
+        );
+      case "tag":
+        return (
+          <g className={baseClassName}>
+            <text x={0} y={shape.size/1.5} fontSize={shape.size-8} fontFamily="monospace">&lt;div&gt;</text>
+          </g>
+        );
     }
+  };
+
+  // Create a rainbow gradient effect
+  const rainbowStyle = {
+    filter: "url('#rainbow')"
   };
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       <svg width="100%" height="100%">
+        <defs>
+          <linearGradient id="rainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="rgb(255,0,0)" />
+            <stop offset="16%" stopColor="rgb(255,127,0)" />
+            <stop offset="33%" stopColor="rgb(255,255,0)" />
+            <stop offset="50%" stopColor="rgb(0,255,0)" />
+            <stop offset="66%" stopColor="rgb(0,0,255)" />
+            <stop offset="83%" stopColor="rgb(127,0,255)" />
+            <stop offset="100%" stopColor="rgb(255,0,255)" />
+          </linearGradient>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          </filter>
+        </defs>
+        
         {shapes.map(shape => {
           // Add subtle interaction with mouse position
           const mouseInfluence = {
@@ -124,12 +176,17 @@ const AnimatedSvgElements = () => {
             y: (mousePosition.y - shape.y) * 0.02
           };
           
+          const glowEffect = shape.id % 3 === 0 ? {filter: "url(#glow)"} : {};
+          const rainbowEffect = shape.id % 5 === 0 ? rainbowStyle : {};
+          
           return (
             <g 
               key={shape.id}
               style={{
                 transform: `translate(${shape.x - mouseInfluence.x}%, ${shape.y - mouseInfluence.y}%) rotate(${shape.rotation}deg)`,
-                transition: 'transform 0.3s ease-out'
+                transition: 'transform 0.3s ease-out',
+                ...glowEffect,
+                ...rainbowEffect
               }}
             >
               {renderShape(shape)}
