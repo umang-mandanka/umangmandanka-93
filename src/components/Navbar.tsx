@@ -4,7 +4,8 @@ import { Code, Menu, Moon, Sun, Terminal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const Navbar = () => {
-  const [darkMode, setDarkMode] = useState(false);
+  // Set darkMode to true by default
+  const [darkMode, setDarkMode] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
@@ -18,8 +19,8 @@ const Navbar = () => {
         setIsScrolled(false);
       }
 
-      // Update active link based on scroll position
-      const sections = document.querySelectorAll('section[id]');
+      // Update active link based on scroll position - fixed TypeScript errors
+      const sections = document.querySelectorAll<HTMLElement>('section[id]');
       sections.forEach(section => {
         const sectionTop = section.offsetTop - 100;
         const sectionHeight = section.offsetHeight;
@@ -38,6 +39,7 @@ const Navbar = () => {
     };
   }, []);
 
+  // Apply dark mode by default when component mounts
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add("dark");
@@ -45,6 +47,11 @@ const Navbar = () => {
       document.documentElement.classList.remove("dark");
     }
   }, [darkMode]);
+
+  // Initialize dark mode on first render
+  useEffect(() => {
+    document.documentElement.classList.add("dark");
+  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
