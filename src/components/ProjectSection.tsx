@@ -73,6 +73,26 @@ const projects: Project[] = [
     liveUrl: "https://project-demo.com",
     githubUrl: "https://github.com",
     longDescription: "A user-friendly weather forecast application that provides current weather conditions, hourly forecasts, and 7-day predictions. The app features geolocation services to automatically detect user location, customizable units (Celsius/Fahrenheit), weather alerts, and animated weather icons. Built with vanilla JavaScript and modern CSS techniques, consuming data from a weather API."
+  },
+  {
+    id: 5,
+    title: "Portfolio Website",
+    description: "A creative portfolio website for showcasing web development projects",
+    image: "https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80",
+    tags: ["React", "Tailwind CSS", "Framer Motion", "Responsive Design"],
+    liveUrl: "https://project-demo.com",
+    githubUrl: "https://github.com",
+    longDescription: "A modern and interactive portfolio website designed to showcase web development projects with style. Featuring smooth animations, responsive layouts, and interactive elements that engage visitors. Built with React and styled with Tailwind CSS, with Framer Motion for advanced animations."
+  },
+  {
+    id: 6,
+    title: "Recipe Sharing Platform",
+    description: "A community-driven recipe sharing platform with social features",
+    image: "https://images.unsplash.com/photo-1556911220-bff31c812dba?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1635&q=80",
+    tags: ["Vue.js", "Firebase", "CSS Grid", "Progressive Web App"],
+    liveUrl: "https://project-demo.com",
+    githubUrl: "https://github.com",
+    longDescription: "A vibrant community platform where food enthusiasts can share recipes, discover new dishes, and connect with other foodies. Features include recipe uploads with image galleries, step-by-step instructions, ingredient lists, user ratings and reviews, and personalized recipe collections. Built as a Progressive Web App using Vue.js and Firebase."
   }
 ];
 
@@ -101,7 +121,7 @@ const ProjectSection = () => {
           </p>
         </div>
         
-        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {projects.map((project, index) => (
             <Card 
               key={project.id} 
@@ -109,46 +129,49 @@ const ProjectSection = () => {
               style={{
                 opacity: isVisible ? 1 : 0,
                 transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
-                transition: `all 0.7s cubic-bezier(0.17, 0.55, 0.55, 1) ${index * 0.2}s`
+                transition: `all 0.7s cubic-bezier(0.17, 0.55, 0.55, 1) ${index * 0.1}s`
               }}
             >
-              <div className="h-56 overflow-hidden">
+              <div className="h-48 overflow-hidden">
                 <img 
                   src={project.image} 
                   alt={project.title} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
                 />
               </div>
-              <CardHeader>
-                <CardTitle>{project.title}</CardTitle>
-                <CardDescription>{project.description}</CardDescription>
+              <CardHeader className="p-4">
+                <CardTitle className="text-lg">{project.title}</CardTitle>
+                <CardDescription className="text-xs">{project.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tags.map((tag) => (
-                    <Badge key={tag} variant="outline" className="bg-primary/5">{tag}</Badge>
+              <CardContent className="p-4 pt-0">
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <Badge key={tag} variant="outline" className="bg-primary/5 text-xs py-0">{tag}</Badge>
                   ))}
+                  {project.tags.length > 3 && (
+                    <Badge variant="outline" className="bg-primary/5 text-xs py-0">+{project.tags.length - 3}</Badge>
+                  )}
                 </div>
               </CardContent>
-              <CardFooter className="flex justify-between">
+              <CardFooter className="flex justify-between p-4 pt-0">
                 <Button 
                   variant="outline" 
                   size="sm" 
                   onClick={() => handleOpenProject(project)}
-                  className="relative overflow-hidden group/btn"
+                  className="relative overflow-hidden group/btn text-xs px-3 py-1 h-auto"
                 >
                   <span className="relative z-10">View Details</span>
                   <span className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></span>
                 </Button>
-                <div className="flex gap-2">
+                <div className="flex gap-1">
                   <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                    <Button variant="ghost" size="sm">
-                      <Github className="h-4 w-4" />
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Github className="h-3.5 w-3.5" />
                     </Button>
                   </a>
                   <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                    <Button variant="ghost" size="sm">
-                      <ExternalLink className="h-4 w-4" />
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <ExternalLink className="h-3.5 w-3.5" />
                     </Button>
                   </a>
                 </div>

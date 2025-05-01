@@ -63,7 +63,7 @@ const HeroSection = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Matrix-like code rain effect generator
+  // Matrix-like code rain effect generator with improved visibility
   useEffect(() => {
     const createMatrixEffect = () => {
       const container = document.getElementById('matrix-container');
@@ -74,14 +74,14 @@ const HeroSection = () => {
       
       const width = container.clientWidth;
       const height = container.clientHeight;
-      const columns = Math.floor(width / 20); // Approx 20px per character
+      const columns = Math.floor(width / 25); // Increased spacing between columns
       
       const codeChars = '01{}[]<>/|\\;:+"\'%$#@ABCDEFGHIJKLMNOPQRSTUVWXYZ';
       
       for (let i = 0; i < columns; i++) {
         const column = document.createElement('div');
         column.className = 'absolute';
-        column.style.left = `${(i * 20) + Math.random() * 10}px`;
+        column.style.left = `${(i * 25) + Math.random() * 10}px`;
         column.style.top = `${Math.random() * height}px`;
         column.style.setProperty('--col-index', i.toString());
         
@@ -95,6 +95,14 @@ const HeroSection = () => {
         
         column.innerHTML = content;
         column.className = 'matrix-code';
+        
+        // Set movement direction based on position (left/right side of screen)
+        if (i % 2 === 0) {
+          column.classList.add('move-down');
+        } else {
+          column.classList.add('move-right');
+        }
+        
         container.appendChild(column);
       }
     };
@@ -107,22 +115,22 @@ const HeroSection = () => {
 
   return (
     <section id="home" ref={heroRef} className="min-h-screen flex flex-col justify-center relative overflow-hidden bg-black font-display">
-      {/* Matrix-like code rain - subtle in background */}
+      {/* Matrix-like code rain - improved visibility */}
       <div 
         id="matrix-container"
-        className="absolute inset-0 overflow-hidden pointer-events-none opacity-10"
+        className="absolute inset-0 overflow-hidden pointer-events-none opacity-20"
       ></div>
       
-      {/* Code flow background - continuous scrolling code that resembles development */}
+      {/* Code flow background - continuous scrolling code with improved visibility */}
       <div 
         ref={codeFlowRef}
-        className="absolute inset-0 opacity-10 pointer-events-none overflow-hidden z-0"
+        className="absolute inset-0 opacity-25 pointer-events-none overflow-hidden z-0"
       >
         <div className="animate-code-flow whitespace-nowrap">
           {Array.from({length: 10}).map((_, rowIndex) => (
             <div key={rowIndex} className="font-code text-xs leading-loose pl-4" style={{
-              opacity: 0.3 + Math.random() * 0.7,
-              color: `hsl(${(rowIndex * 20) % 360}, 70%, 70%)`
+              opacity: 0.5 + Math.random() * 0.5,
+              color: rowIndex % 2 === 0 ? `hsl(${(rowIndex * 20) % 360}, 70%, 70%)` : '#ffcc00'
             }}>
               {`import { useState, useEffect } from 'react';`} <br/>
               {`const Component = () => {`} <br/>
@@ -138,17 +146,17 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Grid Background with improved design - more subtle */}
+      {/* Grid Background with improved design - more visible */}
       <div 
         ref={gridRef}
-        className="absolute inset-0 z-0 opacity-20"
+        className="absolute inset-0 z-0 opacity-30"
         style={{ perspective: '1000px' }}
       >
         <div className="grid grid-cols-12 grid-rows-12 h-full w-full">
           {Array.from({ length: 144 }).map((_, i) => (
             <div 
               key={i}
-              className="border border-blue-500/5 transition-all"
+              className="border border-blue-500/10 transition-all"
               style={{
                 transition: 'all 0.5s cubic-bezier(0.17, 0.55, 0.55, 1)',
                 backdropFilter: 'blur(1px)',
@@ -159,12 +167,12 @@ const HeroSection = () => {
       </div>
       
       {/* Visual elements to recreate the image style */}
-      <div className="absolute top-[15%] left-[15%] max-w-[300px] bg-gray-900/40 backdrop-blur-sm p-4 rounded-lg border border-blue-500/10 transform rotate-[-2deg] opacity-40">
+      <div className="absolute top-[15%] left-[15%] max-w-[300px] bg-gray-900/40 backdrop-blur-sm p-4 rounded-lg border border-blue-500/20 transform rotate-[-2deg] opacity-50">
         <div className="text-xs font-code text-blue-400">// Welcome to my Portfolio</div>
         <div className="text-xs font-code text-green-400">{'const Portfolio = () => { ... }'}</div>
       </div>
       
-      <div className="absolute top-[20%] left-[20%] max-w-[350px] bg-gray-900/40 backdrop-blur-sm p-4 rounded-lg border border-blue-500/10 transform rotate-[1deg] opacity-30">
+      <div className="absolute top-[20%] left-[20%] max-w-[350px] bg-gray-900/40 backdrop-blur-sm p-4 rounded-lg border border-blue-500/20 transform rotate-[1deg] opacity-40">
         <div className="flex gap-2 items-center mb-2">
           <div className="w-2 h-2 rounded-full bg-red-400"></div>
           <div className="w-2 h-2 rounded-full bg-yellow-400"></div>
@@ -275,6 +283,49 @@ const HeroSection = () => {
           </svg>
         </a>
       </div>
+      
+      {/* Add CSS animation for the matrix code */}
+      <style jsx>{`
+        .matrix-code {
+          font-family: 'JetBrains Mono', monospace;
+          font-size: 12px;
+          color: #56eb34;
+          opacity: 0.7;
+          text-shadow: 0 0 5px #56eb34;
+          position: absolute;
+          animation-duration: 10s;
+          animation-timing-function: linear;
+          animation-iteration-count: infinite;
+        }
+        
+        .move-down {
+          animation-name: fallDown;
+        }
+        
+        .move-right {
+          animation-name: moveRight;
+          color: #ffcc00;
+          text-shadow: 0 0 5px #ffcc00;
+        }
+        
+        @keyframes fallDown {
+          from {
+            transform: translateY(-100px);
+          }
+          to {
+            transform: translateY(1200px);
+          }
+        }
+        
+        @keyframes moveRight {
+          from {
+            transform: translateX(-100px);
+          }
+          to {
+            transform: translateX(1200px);
+          }
+        }
+      `}</style>
     </section>
   );
 };

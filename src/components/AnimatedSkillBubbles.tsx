@@ -12,12 +12,11 @@ interface SkillBubble {
   color: string;
 }
 
+// Reduced to 8 skills
 const skillsList = [
-  "HTML5", "CSS3", "JavaScript", "TypeScript", 
-  "React", "Angular", "Tailwind", "Bootstrap",
-  "Firebase", "REST API", "Git", "Figma",
-  "UI/UX", "Responsive", "Animation", "Performance",
-  "Accessibility", "SEO", "VSCode", "npm"
+  "HTML5", "CSS3", "JavaScript", 
+  "React", "TypeScript", "Tailwind", 
+  "Firebase", "REST API"
 ];
 
 const colors = [
@@ -46,15 +45,15 @@ const AnimatedSkillBubbles = () => {
     // Initial dimensions
     updateDimensions();
     
-    // Create bubbles
+    // Create bubbles - limited to 8 skills
     const initialBubbles = skillsList.map((skill, index) => ({
       id: index,
       name: skill,
-      size: Math.random() * 30 + 40, // Random size between 40-70px
+      size: Math.random() * 30 + 50, // Slightly larger bubbles (50-80px)
       x: Math.random() * (dimensions.width || 500),
       y: Math.random() * (dimensions.height || 400),
-      vx: (Math.random() - 0.5) * 1.5,
-      vy: (Math.random() - 0.5) * 1.5,
+      vx: (Math.random() - 0.5) * 1.2, // Slightly slower movement
+      vy: (Math.random() - 0.5) * 1.2,
       color: colors[index % colors.length]
     }));
     
@@ -113,14 +112,16 @@ const AnimatedSkillBubbles = () => {
   return (
     <div 
       ref={containerRef}
-      className="relative h-[400px] w-full overflow-hidden rounded-lg bg-muted/20 backdrop-blur-sm"
+      className="relative h-[400px] w-full overflow-hidden rounded-lg bg-gradient-to-br from-blue-900/20 to-purple-800/20 backdrop-blur-sm"
     >
       {bubbles.map(bubble => (
         <div
           key={bubble.id}
           className={`absolute flex items-center justify-center rounded-full 
-                    text-xs font-semibold transition-transform hover:scale-110
-                    cursor-pointer border bg-${bubble.color}/10 border-${bubble.color}/40 text-foreground`}
+                    text-sm font-semibold transition-transform hover:scale-110
+                    cursor-pointer border hover:shadow-lg hover:shadow-purple-500/20
+                    bg-gradient-to-br from-blue-800/40 to-purple-800/40 backdrop-blur-sm
+                    border-blue-500/30 text-white`}
           style={{
             width: `${bubble.size}px`,
             height: `${bubble.size}px`,

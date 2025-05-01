@@ -1,8 +1,16 @@
 
 import { useState, useRef, useEffect } from "react";
 import { Card } from "@/components/ui/card"; 
-import { Star, Quote } from "lucide-react";
+import { Star, Quote, ChevronLeft, ChevronRight } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import useScrollReveal from "@/hooks/useScrollReveal";
+import { 
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
+} from "@/components/ui/carousel";
 
 interface Testimonial {
   id: number;
@@ -64,70 +72,7 @@ const testimonials: Testimonial[] = [
 
 const TestimonialsSection = () => {
   const { ref, isVisible } = useScrollReveal();
-  const testimonialsRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [activeIndex, setActiveIndex] = useState(0);
   
-  // Intersection observer to detect which testimonial is in view
-  useEffect(() => {
-    if (!testimonialsRef.current) return;
-    
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          const index = parseInt(entry.target.getAttribute('data-index') || '0');
-          setActiveIndex(index);
-        }
-      });
-    }, { threshold: 0.6, root: testimonialsRef.current });
-    
-    const testimonialCards = testimonialsRef.current.querySelectorAll('.testimonial-card');
-    testimonialCards.forEach(card => {
-      observer.observe(card);
-    });
-    
-    return () => {
-      testimonialCards.forEach(card => {
-        observer.unobserve(card);
-      });
-    };
-  }, [isVisible]);
-  
-  // Drag to scroll functionality
-  const handleMouseDown = (e: React.MouseEvent) => {
-    if (!testimonialsRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - testimonialsRef.current.offsetLeft);
-    setScrollLeft(testimonialsRef.current.scrollLeft);
-    testimonialsRef.current.style.cursor = 'grabbing';
-  };
-  
-  const handleMouseUp = () => {
-    if (!testimonialsRef.current) return;
-    setIsDragging(false);
-    testimonialsRef.current.style.cursor = 'grab';
-  };
-  
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !testimonialsRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - testimonialsRef.current.offsetLeft;
-    const walk = (x - startX) * 1.5;
-    testimonialsRef.current.scrollLeft = scrollLeft - walk;
-  };
-  
-  // Scroll to testimonial
-  const scrollToTestimonial = (index: number) => {
-    if (!testimonialsRef.current) return;
-    const testimonialCards = testimonialsRef.current.querySelectorAll('.testimonial-card');
-    if (testimonialCards[index]) {
-      testimonialsRef.current.scrollLeft = testimonialCards[index].getBoundingClientRect().left + 
-        testimonialsRef.current.scrollLeft - testimonialsRef.current.getBoundingClientRect().left;
-    }
-  };
-
   return (
     <section id="testimonials" className="py-20 relative overflow-hidden bg-gradient-to-b from-gray-900 to-black">
       {/* Background elements */}
@@ -153,80 +98,63 @@ const TestimonialsSection = () => {
         >
           <Quote className="absolute text-purple-500/10 w-20 h-20 -top-10 -left-10 z-0" />
           
-          {/* Horizontal scrolling testimonials */}
-          <div 
-            ref={testimonialsRef}
-            className="flex gap-6 overflow-x-auto pb-10 snap-x snap-mandatory cursor-grab scrollbar-none"
-            style={{
-              scrollBehavior: 'smooth',
-              WebkitOverflowScrolling: 'touch',
+          {/* Using Carousel component for better slider with 3 cards visible */}
+          <Carousel
+            opts={{
+              align: "start",
+              loop: true,
             }}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            onMouseMove={handleMouseMove}
+            className="w-full"
           >
-            {testimonials.map((testimonial, index) => (
-              <Card 
-                key={testimonial.id}
-                data-index={index}
-                className="testimonial-card min-w-[280px] md:min-w-[350px] flex-shrink-0 snap-center bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-2"
-              >
-                <div className="p-8">
-                  {/* Floating quote marks */}
-                  <div className="absolute -top-3 -right-3 transform rotate-180">
-                    <Quote className="text-purple-500/20 w-8 h-8" />
-                  </div>
-                  
-                  <div className="flex items-center mb-6">
-                    <div className="mr-4 relative group">
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-500/50 to-blue-500/50 blur-sm group-hover:blur-md transition-all"></div>
-                      <img 
-                        src={testimonial.image} 
-                        alt={testimonial.name} 
-                        className="w-14 h-14 object-cover rounded-full relative z-10 border-2 border-gray-700 group-hover:border-blue-500/50 transition-all duration-300" 
-                      />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg text-white">{testimonial.name}</h3>
-                      <p className="text-xs text-gray-400">
-                        {testimonial.role} at {testimonial.company}
-                      </p>
-                      <div className="flex mt-1">
-                        {Array.from({ length: 5 }).map((_, i) => (
-                          <Star 
-                            key={i} 
-                            className={`h-3 w-3 ${i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"}`} 
-                          />
-                        ))}
+            <CarouselContent className="-ml-4">
+              {testimonials.map((testimonial) => (
+                <CarouselItem key={testimonial.id} className="pl-4 md:basis-1/2 lg:basis-1/3">
+                  <Card className="bg-gray-800/70 backdrop-blur-sm border border-gray-700 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-2 h-full">
+                    <div className="p-8">
+                      {/* Floating quote marks */}
+                      <div className="absolute -top-3 -right-3 transform rotate-180">
+                        <Quote className="text-purple-500/20 w-8 h-8" />
                       </div>
+                      
+                      <div className="flex items-center mb-6">
+                        <div className="mr-4 relative group">
+                          <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-purple-500/50 to-blue-500/50 blur-sm group-hover:blur-md transition-all"></div>
+                          <img 
+                            src={testimonial.image} 
+                            alt={testimonial.name} 
+                            className="w-14 h-14 object-cover rounded-full relative z-10 border-2 border-gray-700 group-hover:border-blue-500/50 transition-all duration-300" 
+                          />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-lg text-white">{testimonial.name}</h3>
+                          <p className="text-xs text-gray-400">
+                            {testimonial.role} at {testimonial.company}
+                          </p>
+                          <div className="flex mt-1">
+                            {Array.from({ length: 5 }).map((_, i) => (
+                              <Star 
+                                key={i} 
+                                className={`h-3 w-3 ${i < testimonial.rating ? "text-yellow-400 fill-yellow-400" : "text-gray-600"}`} 
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                      <p className="text-gray-300 italic text-sm">{testimonial.text}</p>
                     </div>
-                  </div>
-                  <p className="text-gray-300 italic text-sm">{testimonial.text}</p>
-                </div>
-              </Card>
-            ))}
-          </div>
-          
-          {/* Navigation dots */}
-          <div className="flex justify-center mt-10 gap-3">
-            {testimonials.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => scrollToTestimonial(i)}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  i === activeIndex 
-                    ? "bg-gradient-to-r from-purple-500 to-blue-500 w-8" 
-                    : "bg-gray-600 hover:bg-gray-500"
-                }`}
-                aria-label={`Go to testimonial ${i + 1}`}
-              />
-            ))}
-          </div>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <div className="flex justify-center mt-8 gap-4">
+              <CarouselPrevious className="static bg-gray-800/70 hover:bg-gray-700/90 border-gray-700 text-white" />
+              <CarouselNext className="static bg-gray-800/70 hover:bg-gray-700/90 border-gray-700 text-white" />
+            </div>
+          </Carousel>
           
           {/* Instruction text */}
           <div className="text-center mt-8 text-gray-500 text-sm">
-            <p>Drag to explore more testimonials</p>
+            <p>Slide to explore more testimonials</p>
           </div>
         </div>
       </div>
