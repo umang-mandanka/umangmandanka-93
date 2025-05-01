@@ -11,11 +11,13 @@ import FooterCursor from "@/components/FooterCursor";
 import AnimatedSvgElements from "@/components/AnimatedSvgElements";
 import ScrollTriggeredElement from "@/components/ScrollTriggeredElement";
 import FloatingCodeSnippet from "@/components/FloatingCodeSnippet";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 const Index = () => {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [scrollY, setScrollY] = useState(0);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [isDragging, setIsDragging] = useState(false);
 
   useEffect(() => {
     // Smooth scrolling effect
@@ -35,16 +37,27 @@ const Index = () => {
       });
     });
 
-    // Initialize parallax effect
+    // Initialize mousemove effect
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       
+      // Enhanced parallax for elements with parallax class
       document.querySelectorAll('.parallax-layer').forEach(layer => {
         const speed = (layer as HTMLElement).dataset.speed || '0.1';
         const x = (window.innerWidth - e.pageX * parseFloat(speed)) / 100;
         const y = (window.innerHeight - e.pageY * parseFloat(speed)) / 100;
         (layer as HTMLElement).style.transform = `translateX(${x}px) translateY(${y}px)`;
       });
+      
+      // Grid effect for background
+      if (gridRef.current) {
+        const rect = gridRef.current.getBoundingClientRect();
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+        const moveX = x * 0.01;
+        const moveY = y * 0.01;
+        gridRef.current.style.transform = `perspective(1000px) rotateX(${moveY}deg) rotateY(${-moveX}deg)`;
+      }
     };
 
     // Track scroll position
@@ -55,9 +68,25 @@ const Index = () => {
     window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('scroll', handleScroll);
     
+    // Add drag functionality for whole page
+    const handleMouseDown = () => {
+      setIsDragging(true);
+      document.body.style.cursor = 'grabbing';
+    };
+    
+    const handleMouseUp = () => {
+      setIsDragging(false);
+      document.body.style.cursor = 'auto';
+    };
+    
+    window.addEventListener('mousedown', handleMouseDown);
+    window.addEventListener('mouseup', handleMouseUp);
+    
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('mousedown', handleMouseDown);
+      window.removeEventListener('mouseup', handleMouseUp);
     };
   }, []);
 
@@ -65,7 +94,7 @@ const Index = () => {
   const gradientRotation = `${(mousePosition.x / window.innerWidth) * 360}deg`;
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-black text-white">
       <FooterCursor />
       <Navbar />
       <HeroSection />
@@ -76,15 +105,31 @@ const Index = () => {
       <ContactSection />
       <Footer />
       
-      {/* Colorful background gradient */}
+      {/* Enhanced background grid */}
       <div 
-        className="fixed inset-0 -z-10 opacity-10"
+        ref={gridRef}
+        className="fixed inset-0 -z-10 opacity-5 pointer-events-none"
+        style={{ 
+          transformStyle: 'preserve-3d',
+          transition: 'transform 0.6s cubic-bezier(0.17, 0.55, 0.55, 1)'
+        }}
+      >
+        <div className="grid grid-cols-[repeat(40,1fr)] grid-rows-[repeat(40,1fr)] h-full w-full">
+          {Array.from({ length: 1600 }).map((_, i) => (
+            <div key={i} className="border border-white/10"></div>
+          ))}
+        </div>
+      </div>
+      
+      {/* Colorful background gradient - made more vibrant */}
+      <div 
+        className="fixed inset-0 -z-20 opacity-20"
         style={{
           background: `linear-gradient(${gradientRotation}, 
-            rgba(153, 102, 255, 0.5), 
-            rgba(76, 201, 240, 0.5), 
-            rgba(114, 239, 221, 0.5), 
-            rgba(247, 37, 133, 0.5))`,
+            rgba(153, 102, 255, 0.8), 
+            rgba(76, 201, 240, 0.8), 
+            rgba(114, 239, 221, 0.8), 
+            rgba(247, 37, 133, 0.8))`,
           transform: `rotate(${scrollY * 0.02}deg)`,
           transition: 'transform 0.5s ease-out'
         }}
@@ -96,36 +141,29 @@ const Index = () => {
       <ScrollTriggeredElement position="right" offset={1} />
       <ScrollTriggeredElement position="left" offset={2} />
       <ScrollTriggeredElement position="right" offset={3} />
-      <ScrollTriggeredElement position="left" offset={4} />
       <FloatingCodeSnippet />
       
-      {/* Background particles */}
+      {/* Background particles - reduced quantity but enhanced quality */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/3 w-2 h-2 rounded-full bg-cyan-400/30 animate-float"></div>
-        <div className="absolute top-1/2 left-1/5 w-3 h-3 rounded-full bg-purple-400/20 animate-float" style={{animationDelay: "1.5s"}}></div>
-        <div className="absolute bottom-1/3 right-1/4 w-2 h-2 rounded-full bg-amber-400/40 animate-float" style={{animationDelay: "2.2s"}}></div>
-        <div className="absolute top-1/3 right-1/3 w-1 h-1 rounded-full bg-emerald-400/20 animate-float" style={{animationDelay: "0.7s"}}></div>
-        <div className="absolute bottom-1/4 left-1/4 w-1 h-1 rounded-full bg-rose-400/30 animate-float" style={{animationDelay: "1.3s"}}></div>
+        <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-cyan-400/50 blur-sm animate-float"></div>
+        <div className="absolute top-1/2 left-1/5 w-4 h-4 rounded-full bg-purple-400/40 blur-sm animate-float" style={{animationDelay: "1.5s"}}></div>
+        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 rounded-full bg-amber-400/60 blur-sm animate-float" style={{animationDelay: "2.2s"}}></div>
+        <div className="absolute top-1/3 right-1/3 w-2 h-2 rounded-full bg-emerald-400/40 blur-sm animate-float" style={{animationDelay: "0.7s"}}></div>
         
         {/* Code symbol particles */}
-        <div className="absolute top-2/3 right-1/5 text-indigo-400/30 animate-float text-lg" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
-        <div className="absolute top-1/5 right-1/3 text-orange-400/20 animate-float text-lg" style={{animationDelay: "2.4s"}}>&#123; &#125;</div>
-        <div className="absolute bottom-2/5 left-1/3 text-teal-400/30 animate-float text-lg" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
-        
-        {/* Color dots */}
-        <div className="absolute top-3/5 right-2/5 flex gap-1 animate-float" style={{animationDelay: "1.7s"}}>
-          <div className="w-1.5 h-1.5 rounded-full bg-blue-500"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-red-500"></div>
-        </div>
+        <div className="absolute top-2/3 right-1/5 text-indigo-400/50 animate-float text-2xl font-bold" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
+        <div className="absolute top-1/5 right-1/3 text-orange-400/40 animate-float text-2xl font-bold" style={{animationDelay: "2.4s"}}>&#123; &#125;</div>
+        <div className="absolute bottom-2/5 left-1/3 text-teal-400/50 animate-float text-xl font-bold" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
       </div>
       
-      {/* Dynamic radial gradient that follows cursor */}
+      {/* Enhanced dynamic radial gradient that follows cursor */}
       <div 
-        className="fixed inset-0 pointer-events-none z-0 opacity-20"
+        className="fixed inset-0 pointer-events-none z-0 opacity-30 mix-blend-overlay"
         style={{
-          background: `radial-gradient(circle 400px at ${mousePosition.x}px ${mousePosition.y}px, rgba(124, 58, 237, 0.5), transparent)`,
-          mixBlendMode: 'overlay'
+          background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, 
+            rgba(124, 58, 237, 0.4), 
+            rgba(76, 201, 240, 0.2), 
+            transparent)`,
         }}
       ></div>
     </div>

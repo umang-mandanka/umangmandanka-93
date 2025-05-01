@@ -101,16 +101,16 @@
   }
   
   ::-webkit-scrollbar-track {
-    background: hsl(var(--secondary));
+    background: rgba(30, 30, 46, 0.7);
   }
   
   ::-webkit-scrollbar-thumb {
-    background: hsl(var(--muted-foreground) / 0.5);
+    background: rgba(124, 58, 237, 0.4);
     border-radius: 5px;
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: hsl(var(--muted-foreground) / 0.7);
+    background: rgba(124, 58, 237, 0.6);
   }
 
   /* Custom cursor */
@@ -167,9 +167,9 @@
   }
   
   @keyframes floating {
-    0% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0px); }
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(3deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
   }
   
   .glass-effect {
@@ -289,5 +289,38 @@
   
   .hover-glow:hover {
     box-shadow: 0 0 15px 2px hsl(var(--primary) / 0.4);
+  }
+  
+  /* Particle system for hero section */
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    background: white;
+    opacity: 0;
+    animation: particle-animation 3s ease-in-out infinite;
+  }
+  
+  @keyframes particle-animation {
+    0% {
+      transform: translateY(0) scale(1);
+      opacity: 0;
+    }
+    50% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-100px) scale(0);
+      opacity: 0;
+    }
+  }
+  
+  /* Grid animation */
+  .grid-cell {
+    transition: all 0.5s ease;
+  }
+  
+  .grid-cell:hover {
+    background-color: rgba(124, 58, 237, 0.2);
+    transform: scale(1.1);
   }
 }

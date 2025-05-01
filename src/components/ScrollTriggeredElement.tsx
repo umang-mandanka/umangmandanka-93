@@ -54,34 +54,45 @@ const ScrollTriggeredElement = ({ position, offset }: ScrollElementProps) => {
   };
   
   // Choose a color based on offset
-  const getBgColor = () => {
-    const colors = [
-      "from-purple-500/30 to-blue-500/30",
-      "from-cyan-500/30 to-emerald-500/30",
-      "from-amber-500/30 to-orange-500/30",
-      "from-rose-500/30 to-pink-500/30",
-      "from-indigo-500/30 to-violet-500/30",
+  const getBgGradient = () => {
+    const gradients = [
+      "from-purple-600/30 to-blue-500/30",
+      "from-cyan-600/30 to-emerald-500/30",
+      "from-amber-600/30 to-orange-500/30",
+      "from-rose-600/30 to-pink-500/30",
+      "from-indigo-600/30 to-violet-500/30",
     ];
-    return colors[Math.floor(offset % colors.length)];
+    return gradients[Math.floor(offset % gradients.length)];
   };
   
   const translateX = position === "left" 
     ? -100 + scrollProgress * 100
     : 100 - scrollProgress * 100;
     
+  // Add tilt effect based on scroll progress
+  const tiltRotation = position === "left" 
+    ? -2 + scrollProgress * 4
+    : 2 - scrollProgress * 4;
+    
+  // Add additional hover effect state
+  const [isHovered, setIsHovered] = useState(false);
+  
   return (
     <div 
       ref={elementRef}
       className={`fixed ${position === "left" ? "left-8" : "right-8"} select-none
-                 pointer-events-none z-10 py-4 px-6 rounded-lg
-                 bg-gradient-to-br ${getBgColor()} backdrop-blur-sm border border-primary/20
-                 shadow-lg`}
+                 pointer-events-auto z-10 py-4 px-6 rounded-lg
+                 bg-gradient-to-br ${getBgGradient()} backdrop-blur-sm border border-white/10
+                 shadow-lg hover:shadow-2xl transition-shadow`}
       style={{ 
         top: `${20 + offset * 10}%`,
         opacity: isVisible ? scrollProgress : 0,
-        transform: `translateX(${translateX}%) scale(${0.5 + scrollProgress * 0.5}) rotate(${position === "left" ? -2 : 2}deg)`,
-        transition: 'transform 0.3s ease-out, opacity 0.3s ease-out'
+        transform: `translateX(${translateX}%) scale(${0.5 + scrollProgress * 0.5}) rotate(${isHovered ? tiltRotation * 2 : tiltRotation}deg)`,
+        transition: 'transform 0.3s ease-out, opacity 0.3s ease-out, box-shadow 0.3s ease',
+        cursor: 'pointer'
       }}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center gap-2">
         {getIcon()}
@@ -91,6 +102,11 @@ const ScrollTriggeredElement = ({ position, offset }: ScrollElementProps) => {
           <div className="font-semibold" style={{color: `hsl(${(offset * 40) % 360}, 80%, 70%)`}}>{'</'}{position === "left" ? "code" : "design"}{'>'}</div>
         </div>
       </div>
+      
+      {/* Add pulsing highlight effect when hovered */}
+      {isHovered && (
+        <div className="absolute inset-0 -z-10 bg-gradient-to-br from-white/10 to-transparent rounded-lg animate-pulse-glow"></div>
+      )}
     </div>
   );
 };

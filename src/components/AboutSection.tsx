@@ -7,9 +7,9 @@ const AboutSection = () => {
   const { ref, isVisible } = useScrollReveal({ threshold: 0.2 });
 
   return (
-    <section id="about" className="py-20 relative overflow-hidden">
+    <section id="about" className="py-20 relative overflow-hidden bg-gradient-to-b from-black to-gray-900">
       {/* Background elements */}
-      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-primary/5 rounded-full blur-3xl"></div>
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-br from-purple-500/20 to-blue-500/10 rounded-full blur-3xl"></div>
       
       <div className="container mx-auto px-4">
         <div className="flex flex-col md:flex-row gap-12 items-center" ref={ref}>
@@ -22,12 +22,15 @@ const AboutSection = () => {
             }}
           >
             <div className="relative">
-              <div className="bg-gradient-to-tr from-primary to-primary/50 absolute -inset-4 rounded-xl blur-xl"></div>
-              <TiltProfileImage imageUrl="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" />
+              <div className="bg-gradient-to-tr from-purple-500/30 to-blue-500/30 absolute -inset-4 rounded-xl blur-xl"></div>
+              <div className="relative z-10 overflow-hidden rounded-lg border-[3px] border-gray-800">
+                <TiltProfileImage imageUrl="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" />
+              </div>
               
-              {/* Floating elements */}
-              <div className="absolute -top-6 -right-6 w-20 h-20 bg-primary/10 rounded-lg rotate-12 animate-float"></div>
-              <div className="absolute -bottom-6 -left-6 w-16 h-16 bg-primary/10 rounded-full animate-float" style={{animationDelay: "1.5s"}}></div>
+              {/* Code elements floating around image */}
+              <div className="absolute -top-6 -right-6 text-blue-400 text-xl font-mono p-2 bg-gray-900/80 rounded rotate-12 animate-float">{'<div>'}</div>
+              <div className="absolute bottom-20 -left-10 text-purple-400 text-xl font-mono p-2 bg-gray-900/80 rounded rotate-6 animate-float" style={{animationDelay: "1.2s"}}>{'</>'}</div>
+              <div className="absolute -bottom-6 -right-6 text-pink-400 text-xl font-mono p-2 bg-gray-900/80 rounded -rotate-12 animate-float" style={{animationDelay: "0.8s"}}>{'{ }'}</div>
             </div>
           </div>
           
@@ -40,15 +43,15 @@ const AboutSection = () => {
             }}
           >
             <div className="relative">
-              <span className="inline-block px-3 py-1 text-sm bg-primary/10 text-primary rounded-full mb-4">About Me</span>
-              <h2 className="text-3xl font-bold mb-6 relative">
+              <span className="inline-block px-3 py-1 text-sm bg-gradient-to-r from-purple-500/20 to-blue-500/20 text-blue-400 rounded-full mb-4">About Me</span>
+              <h2 className="text-3xl font-bold mb-6 text-white">
                 Transforming Ideas Into 
-                <span className="text-gradient block">Digital Reality</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-400 block">Digital Reality</span>
               </h2>
               
-              <div className="space-y-6 text-lg">
+              <div className="space-y-6 text-lg text-gray-300">
                 <p className="relative">
-                  <span className="absolute -left-4 top-0 text-3xl text-primary/20">"</span>
+                  <span className="absolute -left-4 top-0 text-3xl text-purple-500/30">"</span>
                   Hello! I'm Umang Mandnaka, a passionate Frontend Developer based in India. I enjoy turning complex problems into simple, beautiful and intuitive designs.
                 </p>
                 
@@ -61,17 +64,29 @@ const AboutSection = () => {
                 </p>
               </div>
               
-              <div className="grid grid-cols-2 gap-4 mt-8">
-                <Card className="bg-card/50 backdrop-blur-sm border border-primary/20 hover:-translate-y-1 transition-transform duration-300">
-                  <CardContent className="p-6">
-                    <div className="text-4xl font-bold text-gradient">3+</div>
-                    <div className="text-sm text-muted-foreground">Years Experience</div>
+              <div className="grid grid-cols-4 gap-4 mt-8">
+                <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:-translate-y-1 transition-transform duration-300">
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-400">3+</div>
+                    <div className="text-xs text-gray-400">Years Experience</div>
                   </CardContent>
                 </Card>
-                <Card className="bg-card/50 backdrop-blur-sm border border-primary/20 hover:-translate-y-1 transition-transform duration-300">
-                  <CardContent className="p-6">
-                    <div className="text-4xl font-bold text-gradient">20+</div>
-                    <div className="text-sm text-muted-foreground">Projects Completed</div>
+                <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:-translate-y-1 transition-transform duration-300">
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-400">20+</div>
+                    <div className="text-xs text-gray-400">Projects</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:-translate-y-1 transition-transform duration-300">
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-400">15+</div>
+                    <div className="text-xs text-gray-400">Clients</div>
+                  </CardContent>
+                </Card>
+                <Card className="bg-gray-800/50 backdrop-blur-sm border border-gray-700 hover:-translate-y-1 transition-transform duration-300">
+                  <CardContent className="p-4">
+                    <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 to-blue-400">5+</div>
+                    <div className="text-xs text-gray-400">Tech Stacks</div>
                   </CardContent>
                 </Card>
               </div>

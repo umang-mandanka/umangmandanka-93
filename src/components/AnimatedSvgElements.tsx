@@ -5,7 +5,7 @@ interface SvgShape {
   id: number;
   x: number;
   y: number;
-  type: "circle" | "square" | "triangle" | "hexagon" | "code" | "bracket" | "curlyBrace" | "tag";
+  type: "circle" | "square" | "triangle" | "hexagon" | "code" | "bracket" | "curlyBrace" | "tag" | "react" | "javascript" | "css" | "html";
   size: number;
   color: string;
   speed: number;
@@ -17,11 +17,12 @@ const AnimatedSvgElements = () => {
   const [shapes, setShapes] = useState<SvgShape[]>([]);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
-  // Generate random shapes
+  // Generate random shapes - reduced count from 12 to 8
   useEffect(() => {
     const generatedShapes: SvgShape[] = [];
     const shapeTypes = [
-      "circle", "square", "triangle", "hexagon", "code", "bracket", "curlyBrace", "tag"
+      "circle", "square", "triangle", "hexagon", "code", "bracket", "curlyBrace", "tag", 
+      "react", "javascript", "css", "html"
     ] as const;
     
     // Color palette for frontend dev theme
@@ -30,7 +31,7 @@ const AnimatedSvgElements = () => {
       "text-amber-500", "text-rose-500", "text-indigo-500", "text-orange-500"
     ];
     
-    for (let i = 0; i < 12; i++) {
+    for (let i = 0; i < 8; i++) {
       generatedShapes.push({
         id: i,
         x: Math.random() * 100,
@@ -38,7 +39,7 @@ const AnimatedSvgElements = () => {
         type: shapeTypes[Math.floor(Math.random() * shapeTypes.length)],
         size: Math.random() * 30 + 10,
         color: colors[Math.floor(Math.random() * colors.length)],
-        speed: Math.random() * 0.5 + 0.1,
+        speed: Math.random() * 0.3 + 0.1, // Slower speed
         direction: Math.random() > 0.5 ? 1 : -1,
         rotation: Math.random() * 360
       });
@@ -142,12 +143,37 @@ const AnimatedSvgElements = () => {
             <text x={0} y={shape.size/1.5} fontSize={shape.size-8} fontFamily="monospace">&lt;div&gt;</text>
           </g>
         );
+      case "react":
+        // Simple React logo
+        return (
+          <g className={baseClassName}>
+            <circle cx={shape.size/2} cy={shape.size/2} r={shape.size/6} />
+            <ellipse cx={shape.size/2} cy={shape.size/2} rx={shape.size/2.2} ry={shape.size/6} />
+            <ellipse cx={shape.size/2} cy={shape.size/2} rx={shape.size/2.2} ry={shape.size/6} transform={`rotate(60 ${shape.size/2} ${shape.size/2})`} />
+            <ellipse cx={shape.size/2} cy={shape.size/2} rx={shape.size/2.2} ry={shape.size/6} transform={`rotate(120 ${shape.size/2} ${shape.size/2})`} />
+          </g>
+        );
+      case "javascript":
+        return (
+          <g className={baseClassName}>
+            <rect x={0} y={0} width={shape.size} height={shape.size} rx={2} />
+            <text x={shape.size/6} y={shape.size/1.5} fontSize={shape.size/2} fontFamily="monospace">JS</text>
+          </g>
+        );
+      case "css":
+        return (
+          <g className={baseClassName}>
+            <path d={`M0,0 L${shape.size},0 L${shape.size*0.9},${shape.size} L${shape.size*0.1},${shape.size} Z`} />
+            <text x={shape.size/5} y={shape.size/2} fontSize={shape.size/3} fontFamily="monospace">CSS</text>
+          </g>
+        );
+      case "html":
+        return (
+          <g className={baseClassName}>
+            <text x={0} y={shape.size/1.5} fontSize={shape.size/2.5} fontFamily="monospace">HTML</text>
+          </g>
+        );
     }
-  };
-
-  // Create a rainbow gradient effect
-  const rainbowStyle = {
-    filter: "url('#rainbow')"
   };
 
   return (
@@ -177,7 +203,7 @@ const AnimatedSvgElements = () => {
           };
           
           const glowEffect = shape.id % 3 === 0 ? {filter: "url(#glow)"} : {};
-          const rainbowEffect = shape.id % 5 === 0 ? rainbowStyle : {};
+          const rainbowEffect = shape.id % 5 === 0 ? {filter: "url(#rainbow)"} : {};
           
           return (
             <g 
