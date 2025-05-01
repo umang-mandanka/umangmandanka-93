@@ -20,9 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'code': ['"Fira Code"', 'monospace'],
-				'display': ['"Space Grotesk"', 'sans-serif'],
-				'sans': ['"Inter"', 'sans-serif'],
+				'code': ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
+				'display': ['"Space Grotesk"', 'monospace'],
+				'sans': ['"JetBrains Mono"', '"Inter"', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -125,6 +125,28 @@ export default {
 				'code-flow': {
 					'0%': { transform: 'translateX(0)' },
 					'100%': { transform: 'translateX(-50%)' }
+				},
+				'floating': {
+					'0%': { transform: 'translateY(0) rotate(0deg)' },
+					'50%': { transform: 'translateY(-10px) rotate(3deg)' },
+					'100%': { transform: 'translateY(0) rotate(0deg)' }
+				},
+				'typing': {
+					'from': { width: '0' },
+					'to': { width: '100%' }
+				},
+				'blink-caret': {
+					'50%': { borderColor: 'transparent' }
+				},
+				'matrix-fall': {
+					'0%': { transform: 'translateY(-100%)', opacity: '0' },
+					'50%': { opacity: '1' },
+					'100%': { transform: 'translateY(100vh)', opacity: '0' }
+				},
+				'float-horizontal': {
+					'0%': { transform: 'translateX(0)' },
+					'50%': { transform: 'translateX(15px)' },
+					'100%': { transform: 'translateX(0)' }
 				}
 			},
 			animation: {
@@ -133,7 +155,12 @@ export default {
 				'fade-in': 'fade-in 0.3s ease-out',
 				'scale-in': 'scale-in 0.2s ease-out',
 				'text-shimmer': 'text-shimmer 3s ease-in-out infinite',
-				'code-flow': 'code-flow 20s linear infinite'
+				'code-flow': 'code-flow 20s linear infinite',
+				'floating': 'floating 3s ease-in-out infinite',
+				'typing': 'typing 3s steps(30) infinite',
+				'blink-caret': 'blink-caret 0.5s step-end infinite alternate',
+				'matrix-fall': 'matrix-fall 5s linear infinite',
+				'float-horizontal': 'float-horizontal 6s ease-in-out infinite',
 			}
 		}
 	},

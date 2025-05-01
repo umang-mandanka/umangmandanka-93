@@ -139,7 +139,7 @@ const ScrollTriggeredElement = ({ position, offset }: ScrollElementProps) => {
             <span className="text-purple-400">const</span> 
             <span className="text-blue-300">handle{position === "left" ? "Code" : "Design"}</span> 
             <span className="text-white">= () </span>
-            <span className="text-purple-400">=></span> 
+            <span className="text-purple-400">{'=>'}</span> 
             <span className="text-white">&#123;</span>
           </div>
           <div className="ml-2 text-green-300">// Frontend {position === "left" ? "logic" : "styling"}</div>

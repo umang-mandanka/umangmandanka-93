@@ -94,7 +94,7 @@ const Index = () => {
   const gradientRotation = `${(mousePosition.x / window.innerWidth) * 360}deg`;
 
   return (
-    <div className="min-h-screen bg-black text-white font-sans">
+    <div className="min-h-screen bg-black text-white font-code">
       <FooterCursor />
       <Navbar />
       <HeroSection />
@@ -105,63 +105,59 @@ const Index = () => {
       <ContactSection />
       <Footer />
       
-      {/* Enhanced background grid with improved design */}
+      {/* Enhanced background grid with improved design - lower opacity */}
       <div 
         ref={gridRef}
-        className="fixed inset-0 -z-10 opacity-5 pointer-events-none"
+        className="fixed inset-0 -z-10 opacity-3 pointer-events-none"
         style={{ 
           transformStyle: 'preserve-3d',
           transition: 'transform 0.6s cubic-bezier(0.17, 0.55, 0.55, 1)'
         }}
       >
-        <div className="grid grid-cols-[repeat(40,1fr)] grid-rows-[repeat(40,1fr)] h-full w-full">
-          {Array.from({ length: 1600 }).map((_, i) => (
-            <div key={i} className="border border-purple-500/10"></div>
+        <div className="grid grid-cols-[repeat(30,1fr)] grid-rows-[repeat(30,1fr)] h-full w-full">
+          {Array.from({ length: 900 }).map((_, i) => (
+            <div key={i} className="border border-blue-500/5 grid-cell"></div>
           ))}
         </div>
       </div>
       
-      {/* Enhanced background gradient with vibrant frontend developer colors */}
+      {/* Enhanced background gradient with vibrant frontend developer colors - lower opacity */}
       <div 
-        className="fixed inset-0 -z-20 opacity-30"
+        className="fixed inset-0 -z-20 opacity-15"
         style={{
           background: `linear-gradient(${gradientRotation}, 
-            rgba(124, 58, 237, 0.8),  
-            rgba(59, 130, 246, 0.8), 
-            rgba(99, 102, 241, 0.8),
-            rgba(217, 70, 239, 0.8))`,
+            rgba(59, 130, 246, 0.5),  
+            rgba(139, 92, 246, 0.5), 
+            rgba(96, 165, 250, 0.5),
+            rgba(147, 51, 234, 0.5))`,
           transform: `rotate(${scrollY * 0.02}deg)`,
           transition: 'transform 0.5s ease-out'
         }}
       ></div>
       
-      {/* Interactive elements with improved positioning */}
+      {/* Reduced floating elements with only 2 elements per side */}
       <AnimatedSvgElements />
       <ScrollTriggeredElement position="left" offset={0} />
       <ScrollTriggeredElement position="right" offset={1} />
-      <ScrollTriggeredElement position="left" offset={2} />
-      <ScrollTriggeredElement position="right" offset={3} />
       <FloatingCodeSnippet />
       
-      {/* Reduced background particles with enhanced quality */}
+      {/* Only a few background code particles */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-cyan-400/60 blur-sm animate-float"></div>
-        <div className="absolute top-1/2 left-1/5 w-4 h-4 rounded-full bg-purple-400/50 blur-sm animate-float" style={{animationDelay: "1.5s"}}></div>
-        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 rounded-full bg-amber-400/70 blur-sm animate-float" style={{animationDelay: "2.2s"}}></div>
+        <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-cyan-400/40 blur-sm animate-floating"></div>
+        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 rounded-full bg-amber-400/40 blur-sm animate-floating" style={{animationDelay: "2.2s"}}></div>
         
-        {/* Code symbol particles with improved visual appearance */}
-        <div className="absolute top-2/3 right-1/5 text-indigo-400/60 animate-float text-2xl font-code" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
-        <div className="absolute top-1/5 right-1/3 text-orange-400/50 animate-float text-2xl font-bold" style={{animationDelay: "2.4s"}}>&#123; &#125;</div>
-        <div className="absolute bottom-2/5 left-1/3 text-teal-400/60 animate-float text-xl font-code" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
+        {/* Just a couple code symbols */}
+        <div className="absolute top-2/3 right-1/5 text-blue-400/40 animate-floating text-2xl font-code" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
+        <div className="absolute bottom-2/5 left-1/3 text-purple-400/40 animate-floating text-xl font-code" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
       </div>
       
-      {/* Enhanced dynamic radial gradient */}
+      {/* Reduced dynamic radial gradient */}
       <div 
-        className="fixed inset-0 pointer-events-none z-0 opacity-40 mix-blend-overlay"
+        className="fixed inset-0 pointer-events-none z-0 opacity-20 mix-blend-overlay"
         style={{
-          background: `radial-gradient(circle 800px at ${mousePosition.x}px ${mousePosition.y}px, 
-            rgba(124, 58, 237, 0.5), 
+          background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, 
             rgba(59, 130, 246, 0.3), 
+            rgba(139, 92, 246, 0.2), 
             transparent)`,
         }}
       ></div>
