@@ -37,7 +37,7 @@ const Index = () => {
       });
     });
 
-    // Initialize mousemove effect
+    // Initialize mousemove effect with enhanced parallax
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
       
@@ -49,7 +49,7 @@ const Index = () => {
         (layer as HTMLElement).style.transform = `translateX(${x}px) translateY(${y}px)`;
       });
       
-      // Grid effect for background
+      // Improved grid effect for background
       if (gridRef.current) {
         const rect = gridRef.current.getBoundingClientRect();
         const x = e.clientX - rect.left - rect.width / 2;
@@ -94,7 +94,7 @@ const Index = () => {
   const gradientRotation = `${(mousePosition.x / window.innerWidth) * 360}deg`;
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white font-sans">
       <FooterCursor />
       <Navbar />
       <HeroSection />
@@ -105,7 +105,7 @@ const Index = () => {
       <ContactSection />
       <Footer />
       
-      {/* Enhanced background grid */}
+      {/* Enhanced background grid with improved design */}
       <div 
         ref={gridRef}
         className="fixed inset-0 -z-10 opacity-5 pointer-events-none"
@@ -116,26 +116,26 @@ const Index = () => {
       >
         <div className="grid grid-cols-[repeat(40,1fr)] grid-rows-[repeat(40,1fr)] h-full w-full">
           {Array.from({ length: 1600 }).map((_, i) => (
-            <div key={i} className="border border-white/10"></div>
+            <div key={i} className="border border-purple-500/10"></div>
           ))}
         </div>
       </div>
       
-      {/* Colorful background gradient - made more vibrant */}
+      {/* Enhanced background gradient with vibrant frontend developer colors */}
       <div 
-        className="fixed inset-0 -z-20 opacity-20"
+        className="fixed inset-0 -z-20 opacity-30"
         style={{
           background: `linear-gradient(${gradientRotation}, 
-            rgba(153, 102, 255, 0.8), 
-            rgba(76, 201, 240, 0.8), 
-            rgba(114, 239, 221, 0.8), 
-            rgba(247, 37, 133, 0.8))`,
+            rgba(124, 58, 237, 0.8),  
+            rgba(59, 130, 246, 0.8), 
+            rgba(99, 102, 241, 0.8),
+            rgba(217, 70, 239, 0.8))`,
           transform: `rotate(${scrollY * 0.02}deg)`,
           transition: 'transform 0.5s ease-out'
         }}
       ></div>
       
-      {/* Interactive elements */}
+      {/* Interactive elements with improved positioning */}
       <AnimatedSvgElements />
       <ScrollTriggeredElement position="left" offset={0} />
       <ScrollTriggeredElement position="right" offset={1} />
@@ -143,26 +143,25 @@ const Index = () => {
       <ScrollTriggeredElement position="right" offset={3} />
       <FloatingCodeSnippet />
       
-      {/* Background particles - reduced quantity but enhanced quality */}
+      {/* Reduced background particles with enhanced quality */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-cyan-400/50 blur-sm animate-float"></div>
-        <div className="absolute top-1/2 left-1/5 w-4 h-4 rounded-full bg-purple-400/40 blur-sm animate-float" style={{animationDelay: "1.5s"}}></div>
-        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 rounded-full bg-amber-400/60 blur-sm animate-float" style={{animationDelay: "2.2s"}}></div>
-        <div className="absolute top-1/3 right-1/3 w-2 h-2 rounded-full bg-emerald-400/40 blur-sm animate-float" style={{animationDelay: "0.7s"}}></div>
+        <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-cyan-400/60 blur-sm animate-float"></div>
+        <div className="absolute top-1/2 left-1/5 w-4 h-4 rounded-full bg-purple-400/50 blur-sm animate-float" style={{animationDelay: "1.5s"}}></div>
+        <div className="absolute bottom-1/3 right-1/4 w-3 h-3 rounded-full bg-amber-400/70 blur-sm animate-float" style={{animationDelay: "2.2s"}}></div>
         
-        {/* Code symbol particles */}
-        <div className="absolute top-2/3 right-1/5 text-indigo-400/50 animate-float text-2xl font-bold" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
-        <div className="absolute top-1/5 right-1/3 text-orange-400/40 animate-float text-2xl font-bold" style={{animationDelay: "2.4s"}}>&#123; &#125;</div>
-        <div className="absolute bottom-2/5 left-1/3 text-teal-400/50 animate-float text-xl font-bold" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
+        {/* Code symbol particles with improved visual appearance */}
+        <div className="absolute top-2/3 right-1/5 text-indigo-400/60 animate-float text-2xl font-code" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
+        <div className="absolute top-1/5 right-1/3 text-orange-400/50 animate-float text-2xl font-bold" style={{animationDelay: "2.4s"}}>&#123; &#125;</div>
+        <div className="absolute bottom-2/5 left-1/3 text-teal-400/60 animate-float text-xl font-code" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
       </div>
       
-      {/* Enhanced dynamic radial gradient that follows cursor */}
+      {/* Enhanced dynamic radial gradient */}
       <div 
-        className="fixed inset-0 pointer-events-none z-0 opacity-30 mix-blend-overlay"
+        className="fixed inset-0 pointer-events-none z-0 opacity-40 mix-blend-overlay"
         style={{
-          background: `radial-gradient(circle 600px at ${mousePosition.x}px ${mousePosition.y}px, 
-            rgba(124, 58, 237, 0.4), 
-            rgba(76, 201, 240, 0.2), 
+          background: `radial-gradient(circle 800px at ${mousePosition.x}px ${mousePosition.y}px, 
+            rgba(124, 58, 237, 0.5), 
+            rgba(59, 130, 246, 0.3), 
             transparent)`,
         }}
       ></div>

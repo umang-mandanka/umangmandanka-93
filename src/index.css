@@ -1,4 +1,6 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Inter:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -94,6 +96,32 @@
   body {
     @apply bg-background text-foreground antialiased;
   }
+  
+  /* Heading styles with coding font */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  
+  /* Code highlighting and syntax styling */
+  .syntax-highlight {
+    @apply font-code text-sm bg-black/50 backdrop-blur-md p-4 rounded-lg border border-gray-700/30;
+  }
+  
+  .syntax-string {
+    @apply text-green-400;
+  }
+  
+  .syntax-keyword {
+    @apply text-purple-400;
+  }
+  
+  .syntax-function {
+    @apply text-blue-400;
+  }
+  
+  .syntax-comment {
+    @apply text-gray-500;
+  }
 
   /* Custom scrollbar */
   ::-webkit-scrollbar {
@@ -101,16 +129,16 @@
   }
   
   ::-webkit-scrollbar-track {
-    background: rgba(30, 30, 46, 0.7);
+    @apply bg-black/70;
   }
   
   ::-webkit-scrollbar-thumb {
-    background: rgba(124, 58, 237, 0.4);
-    border-radius: 5px;
+    @apply bg-purple-500/40 rounded-full;
+    border: 2px solid rgba(30, 30, 46, 0.7);
   }
   
   ::-webkit-scrollbar-thumb:hover {
-    background: rgba(124, 58, 237, 0.6);
+    @apply bg-purple-500/60;
   }
 
   /* Custom cursor */
@@ -130,13 +158,13 @@
   .cursor-dot {
     height: 8px;
     width: 8px;
-    background-color: hsl(var(--primary));
+    @apply bg-blue-400;
   }
   
   .cursor-outline {
     height: 40px;
     width: 40px;
-    border: 2px solid hsl(var(--primary) / 0.5);
+    @apply border-2 border-blue-400/50;
     transition: transform 0.15s ease-out;
   }
 
@@ -153,6 +181,32 @@
   
   .scrollbar-none::-webkit-scrollbar {
     display: none;
+  }
+  
+  /* Code editor-like container */
+  .code-editor {
+    @apply bg-gray-900 rounded-lg border border-gray-700/50 overflow-hidden;
+  }
+  
+  .code-editor-header {
+    @apply bg-gray-800 py-2 px-4 flex items-center gap-2 border-b border-gray-700/50;
+  }
+  
+  .code-editor-body {
+    @apply p-4 font-code text-sm;
+  }
+  
+  /* Terminal-like container */
+  .terminal {
+    @apply bg-black rounded-lg border border-gray-700/50 overflow-hidden font-code;
+  }
+  
+  .terminal-header {
+    @apply bg-gray-800 py-1.5 px-4 flex items-center border-b border-gray-700/50;
+  }
+  
+  .terminal-body {
+    @apply p-4 text-sm;
   }
 }
 
@@ -182,6 +236,18 @@
 
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-primary/60;
+  }
+  
+  .text-gradient-purple {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-purple-400 to-purple-300;
+  }
+  
+  .text-gradient-blue {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-cyan-400 to-blue-300;
+  }
+  
+  .text-gradient-rainbow {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-red-500 via-purple-500 to-blue-500;
   }
 
   .card-shine {
@@ -241,7 +307,7 @@
     transform: translateZ(50px);
   }
   
-  /* New animations for interactive elements */
+  /* Enhanced animations for interactive elements */
   .animate-pulse-glow {
     animation: pulse-glow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
@@ -266,7 +332,7 @@
     to { transform: rotate(360deg); }
   }
   
-  /* Scale in animation for elements */
+  /* Scale in animation */
   .animate-scale-in {
     animation: scale-in 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
   }
@@ -291,7 +357,7 @@
     box-shadow: 0 0 15px 2px hsl(var(--primary) / 0.4);
   }
   
-  /* Particle system for hero section */
+  /* Particle system */
   .particle {
     position: absolute;
     border-radius: 50%;
@@ -314,13 +380,42 @@
     }
   }
   
-  /* Grid animation */
+  /* Code typing effect */
+  .typing-effect {
+    border-right: 2px solid;
+    white-space: nowrap;
+    overflow: hidden;
+    animation: typing 3s steps(30) infinite,
+               blink-caret 0.5s step-end infinite alternate;
+  }
+  
+  @keyframes typing {
+    from { width: 0 }
+    to { width: 100% }
+  }
+  
+  @keyframes blink-caret {
+    50% { border-color: transparent }
+  }
+  
+  /* Grid cell hover effect */
   .grid-cell {
     transition: all 0.5s ease;
   }
   
   .grid-cell:hover {
-    background-color: rgba(124, 58, 237, 0.2);
+    @apply bg-purple-500/20;
     transform: scale(1.1);
   }
+}
+
+/* Horizontal scroll for cards */
+.cards-container {
+  @apply flex gap-4 py-4 overflow-x-auto snap-x snap-mandatory scrollbar-none;
+  scroll-padding: 1.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+.cards-container > * {
+  @apply flex-none snap-start;
 }
