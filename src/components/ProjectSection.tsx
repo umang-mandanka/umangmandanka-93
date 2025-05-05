@@ -1,5 +1,5 @@
 
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { 
   Card, 
   CardContent, 
@@ -21,14 +21,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Code, ArrowRight, ExternalLink, Github } from "lucide-react";
 import useScrollReveal from "@/hooks/useScrollReveal";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
-import { motion } from "framer-motion";
 
 interface Project {
   id: number;
@@ -108,7 +100,6 @@ const ProjectSection = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { ref, isVisible } = useScrollReveal({ threshold: 0.1 });
-  const [activeIndex, setActiveIndex] = useState(0);
 
   const handleOpenProject = (project: Project) => {
     setSelectedProject(project);
@@ -130,97 +121,63 @@ const ProjectSection = () => {
           </p>
         </div>
         
-        {/* Modern Horizontal Project Carousel */}
-        <div ref={ref} className="w-full max-w-5xl mx-auto">
-          <Carousel
-            opts={{
-              align: "start",
-              loop: true,
-            }}
-            className="w-full"
-            onSelect={(api) => {
-              if (api) setActiveIndex(api.selectedScrollSnap());
-            }}
-          >
-            <CarouselContent>
-              {projects.map((project, index) => (
-                <CarouselItem key={project.id} className="md:basis-1/2 lg:basis-1/3">
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ 
-                      opacity: isVisible ? 1 : 0, 
-                      y: isVisible ? 0 : 20,
-                      transition: { duration: 0.5, delay: index * 0.1 }
-                    }}
-                    whileHover={{ y: -10 }}
-                    className="h-full p-1"
-                  >
-                    <Card className="overflow-hidden h-full border-primary/10 bg-card/80 backdrop-blur-sm hover:shadow-lg hover:shadow-primary/10 transition-all duration-500">
-                      <div className="h-48 overflow-hidden relative">
-                        <img 
-                          src={project.image} 
-                          alt={project.title} 
-                          className="w-full h-full object-cover transition-transform duration-700 ease-in-out hover:scale-110"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300">
-                          <div className="absolute bottom-4 left-4 right-4 flex justify-between items-center">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              className="bg-black/40 border-white/20 text-white hover:bg-black/60"
-                              onClick={() => handleOpenProject(project)}
-                            >
-                              Details
-                            </Button>
-                            <div className="flex gap-2">
-                              <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                                <Button variant="outline" size="icon" className="h-8 w-8 rounded-full bg-black/40 border-white/20 text-white hover:bg-black/60">
-                                  <Github className="h-4 w-4" />
-                                </Button>
-                              </a>
-                              <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                                <Button variant="outline" size="icon" className="h-8 w-8 rounded-full bg-black/40 border-white/20 text-white hover:bg-black/60">
-                                  <ExternalLink className="h-4 w-4" />
-                                </Button>
-                              </a>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <CardHeader className="p-4">
-                        <CardTitle className="text-lg">{project.title}</CardTitle>
-                        <CardDescription className="text-xs line-clamp-2">{project.description}</CardDescription>
-                      </CardHeader>
-                      <CardContent className="p-4 pt-0">
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {project.tags.slice(0, 3).map((tag) => (
-                            <Badge key={tag} variant="outline" className="bg-primary/5 text-xs py-0">{tag}</Badge>
-                          ))}
-                          {project.tags.length > 3 && (
-                            <Badge variant="outline" className="bg-primary/5 text-xs py-0">+{project.tags.length - 3}</Badge>
-                          )}
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </motion.div>
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex items-center justify-center mt-8 gap-2">
-              <CarouselPrevious className="static transform-none mx-2 bg-primary/10 hover:bg-primary/20 border-primary/20" />
-              <div className="flex gap-2">
-                {projects.map((_, index) => (
-                  <div 
-                    key={index} 
-                    className={`w-2 h-2 rounded-full transition-all ${
-                      activeIndex === index ? "w-6 bg-primary" : "bg-primary/30"
-                    }`}
-                  />
-                ))}
+        <div ref={ref} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          {projects.map((project, index) => (
+            <Card 
+              key={project.id} 
+              className="overflow-hidden hover:shadow-lg transition-all duration-500 group card-shine"
+              style={{
+                opacity: isVisible ? 1 : 0,
+                transform: isVisible ? 'translateY(0)' : 'translateY(40px)',
+                transition: `all 0.7s cubic-bezier(0.17, 0.55, 0.55, 1) ${index * 0.1}s`
+              }}
+            >
+              <div className="h-48 overflow-hidden">
+                <img 
+                  src={project.image} 
+                  alt={project.title} 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-in-out"
+                />
               </div>
-              <CarouselNext className="static transform-none mx-2 bg-primary/10 hover:bg-primary/20 border-primary/20" />
-            </div>
-          </Carousel>
+              <CardHeader className="p-4">
+                <CardTitle className="text-lg">{project.title}</CardTitle>
+                <CardDescription className="text-xs">{project.description}</CardDescription>
+              </CardHeader>
+              <CardContent className="p-4 pt-0">
+                <div className="flex flex-wrap gap-1 mb-3">
+                  {project.tags.slice(0, 3).map((tag) => (
+                    <Badge key={tag} variant="outline" className="bg-primary/5 text-xs py-0">{tag}</Badge>
+                  ))}
+                  {project.tags.length > 3 && (
+                    <Badge variant="outline" className="bg-primary/5 text-xs py-0">+{project.tags.length - 3}</Badge>
+                  )}
+                </div>
+              </CardContent>
+              <CardFooter className="flex justify-between p-4 pt-0">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => handleOpenProject(project)}
+                  className="relative overflow-hidden group/btn text-xs px-3 py-1 h-auto"
+                >
+                  <span className="relative z-10">View Details</span>
+                  <span className="absolute inset-0 bg-primary/10 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300"></span>
+                </Button>
+                <div className="flex gap-1">
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <Github className="h-3.5 w-3.5" />
+                    </Button>
+                  </a>
+                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </Button>
+                  </a>
+                </div>
+              </CardFooter>
+            </Card>
+          ))}
         </div>
 
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

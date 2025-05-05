@@ -1,5 +1,3 @@
-
-// Use the hooks directly from the hooks directory
 import { useToast } from "@/hooks/use-toast"
 import {
   Toast,
