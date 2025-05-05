@@ -22,7 +22,7 @@ const HeroSection = () => {
     }, delta);
 
     return () => { clearInterval(ticker) };
-  }, [text])
+  }, [text, delta])
 
   const tick = () => {
     let i = loopNum % toRotate.length;
@@ -126,17 +126,38 @@ const HeroSection = () => {
         </motion.div>
       </div>
 
-      {/* Add proper style element without jsx property */}
-      <style>
-        {`
-          .matrix-animation-container {
-            position: absolute;
-            inset: 0;
-            overflow: hidden;
-            z-index: -1;
-          }
-        `}
-      </style>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .matrix-animation-container {
+          position: absolute;
+          inset: 0;
+          overflow: hidden;
+          z-index: -1;
+        }
+        
+        .matrix-code {
+          position: absolute;
+          font-family: monospace;
+          white-space: nowrap;
+        }
+        
+        .move-down {
+          animation: moveDown linear infinite;
+        }
+        
+        .move-right {
+          animation: moveRight linear infinite;
+        }
+        
+        @keyframes moveDown {
+          from { top: -100px; }
+          to { top: 100%; }
+        }
+        
+        @keyframes moveRight {
+          from { left: -300px; }
+          to { left: 100%; }
+        }
+      `}} />
     </section>
   );
 };
