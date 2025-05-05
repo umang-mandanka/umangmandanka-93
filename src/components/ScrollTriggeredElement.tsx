@@ -66,48 +66,6 @@ const ScrollTriggeredElement = ({
   const getCodeSnippet = () => {
     return codeSnippets[offset % codeSnippets.length];
   };
-  return <div ref={elementRef} className={`fixed ${position === "left" ? "left-8" : "right-8"} select-none
-                 pointer-events-auto z-10 py-5 px-6 rounded-xl
-                 bg-gradient-to-br ${getBgGradient()} backdrop-blur-md border border-white/20
-                 shadow-lg hover:shadow-2xl transition-shadow font-code`} style={{
-    top: `${20 + offset * 10}%`,
-    opacity: isVisible ? scrollProgress : 0,
-    transform: `translateX(${translateX}%) scale(${0.6 + scrollProgress * 0.4}) rotate(${isHovered ? tiltRotation * 2 : tiltRotation}deg)`,
-    transition: 'transform 0.3s ease-out, opacity 0.3s ease-out, box-shadow 0.3s ease',
-    cursor: 'pointer'
-  }} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-      <div className="flex flex-col gap-2">
-        <div className="flex items-center gap-3">
-          {getIcon()}
-          <div className="text-xs">
-            <div className="font-semibold" style={{
-            color: `hsl(${offset * 40 % 360}, 90%, 75%)`
-          }}>
-              {'<'}{getDevTitle()}{'>'}
-            </div>
-            <div className="text-gray-300 opacity-80 text-[10px]">{getCodeSnippet()}</div>
-          </div>
-        </div>
-        
-        {/* Code snippet underneath */}
-        <div className="text-[10px] bg-black/30 rounded-md p-1.5 text-gray-300 overflow-hidden">
-          <div className="flex items-center gap-1">
-            <span className="text-purple-400">const</span> 
-            <span className="text-blue-300">handle{position === "left" ? "Code" : "Design"}</span> 
-            <span className="text-white">= () </span>
-            <span className="text-purple-400">{'=>'}</span> 
-            <span className="text-white">&#123;</span>
-          </div>
-          <div className="ml-2 text-green-300">// Frontend {position === "left" ? "logic" : "styling"}</div>
-          <div className="text-white">&#125;;</div>
-        </div>
-      </div>
-      
-      {/* Enhanced pulsing effect when hovered */}
-      {isHovered && <>
-          
-          <div className="absolute -bottom-1 -right-1 bg-white/20 w-2 h-2 rounded-full animate-ping"></div>
-        </>}
-    </div>;
+  return;
 };
 export default ScrollTriggeredElement;
