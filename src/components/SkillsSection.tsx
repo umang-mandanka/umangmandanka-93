@@ -1,8 +1,8 @@
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import AnimatedSkillBubbles from "@/components/AnimatedSkillBubbles";
+import { motion, useMotionValue, useAnimation } from "framer-motion";
+import { Badge } from "@/components/ui/badge";
 
 interface Skill {
   name: string;
@@ -88,14 +88,14 @@ const skills: Skill[] = [
     description: "Version control, branching strategies, and collaborative workflows."
   },
   {
-    name: "REST API",
+    name: "NodeJS",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
     level: 85,
     category: "Backend & Tools",
-    description: "Consuming RESTful services, API integration, and asynchronous data handling."
+    description: "Building APIs and server-side applications with Node.js."
   },
   {
-    name: "UI/UX",
+    name: "Figma",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
     level: 80,
     category: "Backend & Tools",
@@ -105,12 +105,126 @@ const skills: Skill[] = [
 
 const categories = ["All", "Frontend", "Frameworks", "CSS Frameworks", "Backend & Tools"];
 
+interface DraggableSkillProps {
+  skill: Skill;
+  onDrag: (name: string, x: number, y: number) => void;
+  position: { x: number, y: number } | null;
+  containerBounds: { width: number; height: number } | null;
+}
+
+const DraggableSkill = ({ skill, onDrag, position, containerBounds }: DraggableSkillProps) => {
+  const controls = useAnimation();
+  const [dragging, setDragging] = useState(false);
+  const [hovered, setHovered] = useState(false);
+  
+  const x = useMotionValue(position?.x || Math.random() * (containerBounds?.width || 500) - 50);
+  const y = useMotionValue(position?.y || Math.random() * (containerBounds?.height || 400) - 50);
+  
+  // Random floating motion
+  useEffect(() => {
+    let animationFrameId: number;
+    
+    const animate = () => {
+      if (!dragging && containerBounds) {
+        const newX = x.get() + (Math.random() - 0.5) * 1;
+        const newY = y.get() + (Math.random() - 0.5) * 1;
+        
+        // Keep within bounds
+        const iconSize = 70;
+        const boundedX = Math.max(0, Math.min(newX, containerBounds.width - iconSize));
+        const boundedY = Math.max(0, Math.min(newY, containerBounds.height - iconSize));
+        
+        x.set(boundedX);
+        y.set(boundedY);
+      }
+      animationFrameId = requestAnimationFrame(animate);
+    };
+    
+    if (containerBounds) {
+      animationFrameId = requestAnimationFrame(animate);
+    }
+    
+    return () => {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+    };
+  }, [dragging, containerBounds, x, y]);
+  
+  const onDragEnd = (event: any, info: any) => {
+    setDragging(false);
+    if (containerBounds) {
+      // Ensure we stay within bounds
+      const iconSize = 70;
+      const boundedX = Math.max(0, Math.min(info.point.x, containerBounds.width - iconSize));
+      const boundedY = Math.max(0, Math.min(info.point.y, containerBounds.height - iconSize));
+      
+      onDrag(skill.name, boundedX, boundedY);
+    }
+  };
+
+  return (
+    <HoverCard>
+      <HoverCardTrigger asChild>
+        <motion.div
+          drag
+          dragMomentum={false}
+          dragElastic={0.1}
+          style={{ x, y, zIndex: dragging ? 10 : 1 }}
+          whileDrag={{ scale: 1.1, zIndex: 10 }}
+          onDragStart={() => setDragging(true)}
+          onDragEnd={onDragEnd}
+          animate={controls}
+          onMouseEnter={() => setHovered(true)}
+          onMouseLeave={() => setHovered(false)}
+          className="absolute cursor-grab active:cursor-grabbing"
+        >
+          <div className={`w-16 h-16 flex items-center justify-center rounded-full 
+                      transition-all duration-300 ${
+                        hovered ? 'scale-110 shadow-lg shadow-primary/30' : ''
+                      }`}>
+            <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 backdrop-blur-sm rounded-full"></div>
+            <motion.div 
+              animate={{ 
+                rotate: [0, 5, 0, -5, 0],
+              }}
+              transition={{ 
+                duration: 6, 
+                ease: "easeInOut", 
+                repeat: Infinity,
+                repeatType: "reverse" 
+              }}
+              className="relative z-10"
+            >
+              <img src={skill.icon} alt={skill.name} className="w-10 h-10 drop-shadow-md" />
+            </motion.div>
+          </div>
+        </motion.div>
+      </HoverCardTrigger>
+      <HoverCardContent className="w-64 bg-card/80 backdrop-blur-md border border-primary/20">
+        <div className="flex flex-col gap-2">
+          <div className="flex justify-between items-center">
+            <h4 className="text-lg font-medium">{skill.name}</h4>
+            <Badge className="bg-primary/10 text-primary text-xs">{skill.level}%</Badge>
+          </div>
+          <div className="w-full h-2 bg-secondary/50 rounded-full overflow-hidden">
+            <div 
+              className="h-full bg-primary rounded-full"
+              style={{ width: `${skill.level}%` }}
+            />
+          </div>
+          <p className="text-sm text-muted-foreground">{skill.description}</p>
+        </div>
+      </HoverCardContent>
+    </HoverCard>
+  );
+};
+
 const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>(skills);
   const [isVisible, setIsVisible] = useState(false);
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-  const [showBubbles, setShowBubbles] = useState(false);
+  const [skillPositions, setSkillPositions] = useState<Record<string, { x: number, y: number }>>({});
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerBounds, setContainerBounds] = useState<{ width: number; height: number } | null>(null);
 
   useEffect(() => {
     if (activeCategory === "All") {
@@ -136,21 +250,32 @@ const SkillsSection = () => {
       observer.observe(section);
     }
 
-    // Show animated bubbles after a delay
-    const timer = setTimeout(() => {
-      setShowBubbles(true);
-    }, 1500);
+    const updateBounds = () => {
+      if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
+        setContainerBounds({
+          width: rect.width,
+          height: rect.height
+        });
+      }
+    };
+
+    updateBounds();
+    window.addEventListener('resize', updateBounds);
 
     return () => {
       if (section) {
         observer.disconnect();
       }
-      clearTimeout(timer);
+      window.removeEventListener('resize', updateBounds);
     };
   }, []);
 
-  const handleSkillHover = (name: string | null) => {
-    setHoveredSkill(name);
+  const handleSkillDrag = (name: string, x: number, y: number) => {
+    setSkillPositions(prev => ({
+      ...prev,
+      [name]: { x, y }
+    }));
   };
 
   return (
@@ -168,85 +293,69 @@ const SkillsSection = () => {
           </p>
         </div>
         
-        {/* Interactive skill bubbles */}
-        <div className={`mb-16 transition-all duration-1000 ${showBubbles ? 'opacity-100' : 'opacity-0'}`}>
-          <AnimatedSkillBubbles />
-        </div>
-        
-        {/* Moving tech words background */}
-        <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none select-none">
-          <div className="animate-marquee whitespace-nowrap text-4xl font-bold text-primary">
-            {skills.map(skill => (
-              <span key={skill.name} className="mx-4">{skill.name}</span>
-            ))}
-            {skills.map(skill => (
-              <span key={`repeat-${skill.name}`} className="mx-4">{skill.name}</span>
-            ))}
-          </div>
-        </div>
-        
         {/* Category filters */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {categories.map((category) => (
-            <button
+            <motion.button
               key={category}
-              className={`px-4 py-2 rounded-full text-sm transition-all relative overflow-hidden ${
+              className={`px-4 py-2 rounded-full text-sm transition-colors relative overflow-hidden ${
                 activeCategory === category
                   ? "bg-primary text-primary-foreground"
                   : "bg-secondary hover:bg-secondary/70"
               }`}
               onClick={() => setActiveCategory(category)}
+              whileTap={{ scale: 0.97 }}
+              whileHover={{ scale: 1.05 }}
             >
               <span className="relative z-10">{category}</span>
-              {activeCategory !== category && (
-                <span className="absolute inset-0 bg-primary/10 scale-x-0 hover:scale-x-100 transition-transform duration-300 origin-left"></span>
-              )}
-            </button>
+            </motion.button>
           ))}
         </div>
         
-        {/* Skill cards grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        {/* Interactive draggable skill icons */}
+        <div 
+          ref={containerRef}
+          className="relative h-[500px] w-full bg-gradient-to-br from-secondary/10 to-primary/5 backdrop-blur-sm rounded-xl mb-10 border border-primary/10 overflow-hidden"
+        >
+          {isVisible && containerBounds && filteredSkills.map((skill) => (
+            <DraggableSkill 
+              key={skill.name}
+              skill={skill}
+              onDrag={handleSkillDrag}
+              position={skillPositions[skill.name] || null}
+              containerBounds={containerBounds}
+            />
+          ))}
+          <div className="absolute bottom-4 right-4 text-xs text-muted-foreground">
+            Drag skills anywhere in this area
+          </div>
+        </div>
+        
+        {/* Skill cards grid for reference */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 mt-8">
           {filteredSkills.map((skill, index) => (
-            <HoverCard key={skill.name} open={hoveredSkill === skill.name}>
-              <HoverCardTrigger asChild>
-                <Card 
-                  className={`hover:-translate-y-2 transition-all duration-300 cursor-pointer perspective ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-                  }`} 
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                  onMouseEnter={() => handleSkillHover(skill.name)}
-                  onMouseLeave={() => handleSkillHover(null)}
-                >
-                  <CardContent className="p-6 flex flex-col items-center">
-                    <div className="relative mb-4">
-                      <div className="absolute inset-0 bg-primary/10 rounded-full blur-md"></div>
-                      <img src={skill.icon} alt={skill.name} className="w-16 h-16 relative z-10" />
-                    </div>
-                    <h3 className="text-lg font-semibold">{skill.name}</h3>
-                    
-                    <div className="w-full mt-4 bg-secondary rounded-full h-2 overflow-hidden">
-                      <div 
-                        className="bg-primary h-2 rounded-full relative"
-                        style={{ 
-                          width: isVisible ? `${skill.level}%` : "0%", 
-                          transition: "width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)" 
-                        }}
-                      >
-                        <span className="absolute inset-0 bg-gradient-to-r from-primary/50 via-primary to-primary/50 animate-pulse"></span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80 backdrop-blur-md bg-card/70 border border-primary/20">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="font-semibold">{skill.name}</h4>
-                  <span className="text-xs font-mono bg-primary/10 px-2 py-1 rounded-full text-primary">{skill.level}%</span>
-                </div>
-                <p className="text-sm text-muted-foreground">{skill.description}</p>
-              </HoverCardContent>
-            </HoverCard>
+            <motion.div
+              key={skill.name}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ 
+                opacity: isVisible ? 1 : 0, 
+                y: isVisible ? 0 : 20 
+              }}
+              transition={{ duration: 0.5, delay: index * 0.05 }}
+            >
+              <Card className="border-primary/10 hover:border-primary/30 transition-all duration-300 hover:shadow-md">
+                <CardContent className="p-4 flex flex-col items-center justify-center gap-2">
+                  <img src={skill.icon} alt={skill.name} className="w-8 h-8" />
+                  <span className="text-sm font-medium">{skill.name}</span>
+                  <div className="w-full h-1 bg-secondary/50 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-primary rounded-full"
+                      style={{ width: `${skill.level}%` }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
           ))}
         </div>
       </div>
