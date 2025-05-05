@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
@@ -99,7 +100,7 @@ const HeroSection = () => {
           transition={{ duration: 0.7, delay: 0.5 }}
         >
           Hi, I'm <span className="text-blue-400 animate-text-shimmer">Your Name</span>
-        </motion.h2>
+        </motion.h1>
         <motion.p
           className="text-xl md:text-2xl text-gray-300 mb-8"
           initial={{ opacity: 0, y: 50 }}
