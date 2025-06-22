@@ -93,24 +93,16 @@ const ScrollTriggeredElement = ({
     return codeSnippets[offset % codeSnippets.length];
   };
 
+  if (!isVisible) return null;
+
   return (
-    <div
-      ref={elementRef}
-      className={`fixed top-1/2 ${position === "left" ? "left-8" : "right-8"} z-20 transition-all duration-700 ${
-        isVisible ? "opacity-100" : "opacity-0"
-      }`}
-      style={{
-        transform: `translateX(${translateX}px) translateY(-50%) rotate(${tiltRotation}deg)`,
-      }}
-    >
-      <div className={`bg-gradient-to-br ${getBgGradient()} backdrop-blur-lg p-4 rounded-xl border border-white/10 max-w-xs hover:scale-105 transition-all duration-300`}>
-        <div className="flex items-center gap-3 mb-2">
-          {getIcon()}
-          <span className="text-white font-code text-sm font-semibold">{getDevTitle()}</span>
-        </div>
-        <div className="text-xs text-gray-300 font-code bg-black/20 p-2 rounded">
-          {getCodeSnippet()}
-        </div>
+    <div className={`bg-gradient-to-br ${getBgGradient()} backdrop-blur-lg p-4 rounded-xl border border-white/10 max-w-xs hover:scale-105 transition-all duration-300`}>
+      <div className="flex items-center gap-3 mb-2">
+        {getIcon()}
+        <span className="text-white font-code text-sm font-semibold">{getDevTitle()}</span>
+      </div>
+      <div className="text-xs text-gray-300 font-code bg-black/20 p-2 rounded">
+        {getCodeSnippet()}
       </div>
     </div>
   );

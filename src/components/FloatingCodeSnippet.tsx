@@ -7,17 +7,6 @@ interface FloatingCodeProps {
 
 const codeSnippets = [
   {
-    language: "css",
-    code: `.hero-section {
-  display: flex;
-  align-items: center;
-  min-height: 100vh;
-  position: relative;
-  overflow: hidden;
-}`,
-    position: { top: "25%", left: "5%" }
-  },
-  {
     language: "javascript",
     code: `const animateElements = () => {
   elements.forEach(el => {
@@ -86,8 +75,8 @@ const FloatingCodeSnippet: React.FC<FloatingCodeProps> = ({ delay = 0 }) => {
         
         return (
           <div 
-            key={index} 
-            className="absolute z-10 max-w-xs"
+            key={`${snippet.language}-${index}-${btoa(encodeURIComponent(snippet.code)).slice(0,8)}`} 
+            className="absolute z-0 max-w-xs"
             style={{ 
               ...style,
               transitionDelay: `${delay + index * 0.2}s`

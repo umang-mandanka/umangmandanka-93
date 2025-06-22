@@ -1,0 +1,18 @@
+.matrix-code {
+  font-family: 'Fira Mono', 'Consolas', monospace;
+  color: #00ff99;
+  font-size: 1.1rem;
+  line-height: 1.2;
+  text-shadow: 0 0 8px #00ff99, 0 0 2px #fff;
+  pointer-events: none;
+  user-select: none;
+  /* fallback for fading tail */
+}
+.matrix-code span {
+  display: block;
+  opacity: 1;
+  transition: opacity 0.3s;
+}
+.matrix-code .fade {
+  opacity: 0.2;
+}

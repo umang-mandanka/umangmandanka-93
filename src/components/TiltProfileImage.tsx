@@ -12,13 +12,16 @@ const TiltProfileImage = ({ imageUrl = "https://images.unsplash.com/photo-156860
   
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!containerRef.current) return;
-    
+    // On mobile/touch, don't tilt
+    if (window.matchMedia('(pointer: coarse)').matches) return;
     const { left, top, width, height } = containerRef.current.getBoundingClientRect();
     const x = (e.clientX - left) / width - 0.5;
     const y = (e.clientY - top) / height - 0.5;
-    
-    setTilt({ x: x * 20, y: -y * 20 });
+    // Clamp tilt to ±10deg
+    const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
+    setTilt({ x: clamp(x * 20, -10, 10), y: clamp(-y * 20, -10, 10) });
   };
+
   
   const handleMouseEnter = () => {
     setIsHovering(true);
@@ -57,6 +60,7 @@ const TiltProfileImage = ({ imageUrl = "https://images.unsplash.com/photo-156860
             src={imageUrl}
             alt="Profile of Umang Mandnaka"
             className="w-full h-full object-cover"
+            loading="lazy"
             style={{
               transform: isHovering ? 'scale(1.05)' : 'scale(1)', 
               transition: 'transform 0.3s ease-out'

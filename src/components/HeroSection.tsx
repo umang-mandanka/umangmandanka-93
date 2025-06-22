@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, Code, Braces, FileCode, Sparkles, MousePointer2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import "@/styles/matrix.css";
 
 const HeroSection = () => {
   const [text, setText] = useState("");
@@ -102,28 +103,28 @@ const HeroSection = () => {
       
       for (let i = 0; i < columns; i++) {
         const column = document.createElement('div');
-        column.className = 'absolute';
+        column.className = 'absolute matrix-code';
         column.style.left = `${(i * 25) + Math.random() * 10}px`;
         column.style.top = `${Math.random() * height}px`;
         column.style.setProperty('--col-index', i.toString());
         
         const length = 5 + Math.floor(Math.random() * 15);
         let content = '';
-        
+        // Each char is a <span>, tail chars get fade class
         for (let j = 0; j < length; j++) {
-          content += codeChars[Math.floor(Math.random() * codeChars.length)];
-          if (j < length - 1) content += '<br>';
+          const char = codeChars[Math.floor(Math.random() * codeChars.length)];
+          if (j > length - 5) {
+            content += `<span class='fade'>${char}</span>`;
+          } else {
+            content += `<span>${char}</span>`;
+          }
         }
-        
         column.innerHTML = content;
-        column.className = 'matrix-code';
-        
         if (i % 2 === 0) {
           column.classList.add('move-down');
         } else {
           column.classList.add('move-right');
         }
-        
         container.appendChild(column);
       }
     };
@@ -139,7 +140,7 @@ const HeroSection = () => {
       {/* Interactive cursor trail */}
       {cursorTrail.map((point, index) => (
         <div
-          key={point.id}
+          key={`${point.id}-${index}`}
           className="fixed pointer-events-none z-50"
           style={{
             left: point.x - 2,

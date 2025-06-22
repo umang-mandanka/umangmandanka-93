@@ -45,7 +45,7 @@ const AboutSection = () => {
   ];
 
   return (
-    <section id="about" className="py-20 relative overflow-hidden section-bg-gradient">
+    <section id="about" className="py-20 z-10 relative overflow-hidden section-bg-gradient">
       {/* Background code symbols - reduced and subtle */}
       <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none">
         <div className="absolute top-10 left-[10%] font-code text-4xl opacity-20">&lt;about&gt;</div>
@@ -90,6 +90,36 @@ const AboutSection = () => {
                 </p>
               </CardContent>
             </Card>
+
+             {/* Personal interests grid */}
+             <div className="mt-8">
+                <h3 className="text-card-title font-display text-white mb-4">Beyond the Screen</h3>
+                <div className="grid grid-cols-2 gap-4">
+                  {personalityTraits.map((trait, index) => (
+                    <PersonalityCard 
+                      key={index}
+                      icon={trait.icon}
+                      title={trait.title}
+                      description={trait.description}
+                      color={trait.color}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Notable achievement highlight */}
+              <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 border border-blue-500/20">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+                  <span className="text-green-400 font-code text-sm">Currently Available</span>
+                </div>
+                <h4 className="text-white font-display text-lg mb-2">Let's Build Something Amazing</h4>
+                <p className="text-gray-400 text-sm">
+                  I'm currently taking on new projects and would love to hear about your next big idea. 
+                  Let's create something that users will remember.
+                </p>
+              </div>
           </div>
           
           <div 
@@ -125,7 +155,7 @@ const AboutSection = () => {
               {/* Enhanced achievement cards */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-8">
                 {achievementCards.map((card, index) => (
-                  <Card key={index} className="group hover:scale-105 transition-all duration-300 bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 hover:border-blue-500/30">
+                  <Card key={index} className="group hover:scale-105 transition-all duration-300 bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-white/10 hover:border-blue-500/30 hover:ring-2 hover:ring-blue-400/40 hover:shadow-lg hover:shadow-blue-400/20">
                     <CardContent className="p-4">
                       <div className="flex items-center gap-2 mb-2">
                         {card.icon}
@@ -138,35 +168,7 @@ const AboutSection = () => {
                 ))}
               </div>
 
-              {/* Personal interests grid */}
-              <div className="mt-8">
-                <h3 className="text-card-title font-display text-white mb-4">Beyond the Screen</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {personalityTraits.map((trait, index) => (
-                    <PersonalityCard 
-                      key={index}
-                      icon={trait.icon}
-                      title={trait.title}
-                      description={trait.description}
-                      color={trait.color}
-                      index={index}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Notable achievement highlight */}
-              <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 border border-blue-500/20">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
-                  <span className="text-green-400 font-code text-sm">Currently Available</span>
-                </div>
-                <h4 className="text-white font-display text-lg mb-2">Let's Build Something Amazing</h4>
-                <p className="text-gray-400 text-sm">
-                  I'm currently taking on new projects and would love to hear about your next big idea. 
-                  Let's create something that users will remember.
-                </p>
-              </div>
+             
             </div>
           </div>
         </div>
