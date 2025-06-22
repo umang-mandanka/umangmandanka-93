@@ -21,8 +21,17 @@ export default {
 		extend: {
 			fontFamily: {
 				'code': ['"JetBrains Mono"', '"Fira Code"', 'monospace'],
-				'display': ['"Space Grotesk"', 'monospace'],
-				'sans': ['"JetBrains Mono"', '"Inter"', 'sans-serif'],
+				'display': ['"Space Grotesk"', 'system-ui', 'sans-serif'],
+				'body': ['"Inter"', 'system-ui', 'sans-serif'],
+				'sans': ['"Inter"', 'system-ui', 'sans-serif'],
+			},
+			fontSize: {
+				'hero': ['clamp(3rem, 8vw, 6rem)', { lineHeight: '0.9', letterSpacing: '-0.04em' }],
+				'section-title': ['clamp(2.5rem, 5vw, 4rem)', { lineHeight: '1.1', letterSpacing: '-0.03em' }],
+				'card-title': ['clamp(1.25rem, 3vw, 1.75rem)', { lineHeight: '1.3', letterSpacing: '-0.01em' }],
+				'body-large': ['clamp(1.125rem, 2vw, 1.25rem)', { lineHeight: '1.7' }],
+				'body': ['clamp(1rem, 1.5vw, 1.125rem)', { lineHeight: '1.6' }],
+				'caption': ['clamp(0.875rem, 1vw, 1rem)', { lineHeight: '1.4' }],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
@@ -73,6 +82,10 @@ export default {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			spacing: {
+				'section': 'clamp(4rem, 8vw, 8rem)',
+				'block': 'clamp(2rem, 4vw, 3rem)',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -147,6 +160,11 @@ export default {
 					'0%': { transform: 'translateX(0)' },
 					'50%': { transform: 'translateX(15px)' },
 					'100%': { transform: 'translateX(0)' }
+				},
+				'gradient-shift': {
+					'0%': { backgroundPosition: '0% 50%' },
+					'50%': { backgroundPosition: '100% 50%' },
+					'100%': { backgroundPosition: '0% 50%' }
 				}
 			},
 			animation: {
@@ -161,6 +179,7 @@ export default {
 				'blink-caret': 'blink-caret 0.5s step-end infinite alternate',
 				'matrix-fall': 'matrix-fall 5s linear infinite',
 				'float-horizontal': 'float-horizontal 6s ease-in-out infinite',
+				'gradient-shift': 'gradient-shift 6s ease infinite',
 			}
 		}
 	},
