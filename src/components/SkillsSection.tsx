@@ -1,116 +1,134 @@
 
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
-import AnimatedSkillBubbles from "@/components/AnimatedSkillBubbles";
+import TechStackCard from "@/components/TechStackCard";
 
 interface Skill {
   name: string;
   icon: string;
-  level: number;
+  yearsExperience: number;
+  projectCount: number;
   category: string;
   description: string;
+  primaryColor: string;
 }
 
 const skills: Skill[] = [
-  // Frontend
   {
-    name: "HTML",
+    name: "HTML5",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg",
-    level: 95,
+    yearsExperience: 6,
+    projectCount: 50,
     category: "Frontend",
-    description: "Expertise in semantic HTML5, accessibility, and SEO best practices."
+    description: "Building semantic, accessible web structures with modern HTML5 features, form validation, and SEO optimization.",
+    primaryColor: "#E34F26"
   },
   {
-    name: "CSS",
+    name: "CSS3",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/css3/css3-original.svg",
-    level: 90,
+    yearsExperience: 6,
+    projectCount: 45,
     category: "Frontend",
-    description: "Strong knowledge of CSS3, animations, flexbox, and grid layouts."
+    description: "Creating responsive layouts, animations, and modern designs using CSS Grid, Flexbox, and custom properties.",
+    primaryColor: "#1572B6"
   },
   {
     name: "JavaScript",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg",
-    level: 85,
+    yearsExperience: 5,
+    projectCount: 40,
     category: "Frontend",
-    description: "Proficient in ES6+ features, async programming, and DOM manipulation."
+    description: "Developing interactive web applications with ES6+, async programming, and modern JavaScript frameworks.",
+    primaryColor: "#F7DF1E"
   },
   {
     name: "TypeScript",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg",
-    level: 80,
+    yearsExperience: 3,
+    projectCount: 25,
     category: "Frontend",
-    description: "Experience with type systems, interfaces, and enhancing code quality."
-  },
-  // Frameworks
-  {
-    name: "Angular",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg",
-    level: 85,
-    category: "Frameworks",
-    description: "Building complex SPAs with Angular, including state management with NgRx."
+    description: "Building type-safe applications with advanced TypeScript features for better code quality and maintainability.",
+    primaryColor: "#3178C6"
   },
   {
     name: "React",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg",
-    level: 75,
-    category: "Frameworks",
-    description: "Creating interactive UIs with React, hooks, and context API."
+    yearsExperience: 4,
+    projectCount: 30,
+    category: "Framework",
+    description: "Creating dynamic user interfaces with React hooks, context API, and modern state management solutions.",
+    primaryColor: "#61DAFB"
   },
-  // CSS Frameworks
+  {
+    name: "Angular",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/angularjs/angularjs-original.svg",
+    yearsExperience: 3,
+    projectCount: 15,
+    category: "Framework",
+    description: "Building enterprise-level SPAs with Angular, RxJS, and comprehensive testing strategies.",
+    primaryColor: "#DD0031"
+  },
+  {
+    name: "Tailwind CSS",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
+    yearsExperience: 3,
+    projectCount: 25,
+    category: "CSS Framework",
+    description: "Rapid UI development with utility-first approach, custom design systems, and responsive components.",
+    primaryColor: "#06B6D4"
+  },
   {
     name: "Bootstrap",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/bootstrap/bootstrap-original.svg",
-    level: 90,
-    category: "CSS Frameworks",
-    description: "Rapidly developing responsive websites with Bootstrap components."
+    yearsExperience: 4,
+    projectCount: 20,
+    category: "CSS Framework",
+    description: "Fast prototyping and responsive web development using Bootstrap's component library and grid system.",
+    primaryColor: "#7952B3"
   },
-  {
-    name: "Tailwind",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/tailwindcss/tailwindcss-original.svg",
-    level: 85,
-    category: "CSS Frameworks",
-    description: "Building custom designs efficiently with utility-first approach."
-  },
-  // Backend & Tools
   {
     name: "Firebase",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/firebase/firebase-plain.svg",
-    level: 75,
-    category: "Backend & Tools",
-    description: "Implementing authentication, real-time databases, and cloud functions."
+    yearsExperience: 2,
+    projectCount: 12,
+    category: "Backend",
+    description: "Full-stack development with Firebase Authentication, Firestore, Cloud Functions, and real-time features.",
+    primaryColor: "#FFCA28"
   },
   {
     name: "Git",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/git/git-original.svg",
-    level: 80,
-    category: "Backend & Tools",
-    description: "Version control, branching strategies, and collaborative workflows."
+    yearsExperience: 5,
+    projectCount: 35,
+    category: "Tools",
+    description: "Version control mastery with Git workflows, branching strategies, and collaborative development practices.",
+    primaryColor: "#F05032"
   },
   {
-    name: "REST API",
-    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
-    level: 85,
-    category: "Backend & Tools",
-    description: "Consuming RESTful services, API integration, and asynchronous data handling."
-  },
-  {
-    name: "UI/UX",
+    name: "Figma",
     icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
-    level: 80,
-    category: "Backend & Tools",
-    description: "Creating intuitive user interfaces and thoughtful user experiences."
+    yearsExperience: 3,
+    projectCount: 20,
+    category: "Design",
+    description: "UI/UX design and prototyping, creating design systems and seamless designer-developer handoffs.",
+    primaryColor: "#F24E1E"
   },
+  {
+    name: "Node.js",
+    icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg",
+    yearsExperience: 3,
+    projectCount: 18,
+    category: "Backend",
+    description: "Server-side development with Node.js, REST APIs, and integration with various databases and services.",
+    primaryColor: "#339933"
+  }
 ];
 
-const categories = ["All", "Frontend", "Frameworks", "CSS Frameworks", "Backend & Tools"];
+const categories = ["All", "Frontend", "Framework", "CSS Framework", "Backend", "Tools", "Design"];
 
 const SkillsSection = () => {
   const [activeCategory, setActiveCategory] = useState("All");
   const [filteredSkills, setFilteredSkills] = useState<Skill[]>(skills);
   const [isVisible, setIsVisible] = useState(false);
-  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-  const [showBubbles, setShowBubbles] = useState(false);
 
   useEffect(() => {
     if (activeCategory === "All") {
@@ -136,118 +154,86 @@ const SkillsSection = () => {
       observer.observe(section);
     }
 
-    // Show animated bubbles after a delay
-    const timer = setTimeout(() => {
-      setShowBubbles(true);
-    }, 1500);
-
     return () => {
       if (section) {
         observer.disconnect();
       }
-      clearTimeout(timer);
     };
   }, []);
 
-  const handleSkillHover = (name: string | null) => {
-    setHoveredSkill(name);
-  };
-
   return (
-    <section id="skills" className="py-20 relative overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute bottom-0 left-0 w-full h-full bg-[radial-gradient(circle_at_bottom_left,hsl(var(--primary)/5%),transparent_70%)]"></div>
+    <section id="skills" className="block-section relative overflow-hidden">
+      {/* Modern Background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5"></div>
+      <div className="absolute top-0 right-0 w-1/3 h-1/3 bg-gradient-to-bl from-accent/10 to-transparent rounded-full blur-3xl"></div>
+      <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-primary/5 to-transparent rounded-full blur-3xl"></div>
       
       <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
         <div className="text-center mb-16">
-          <h2 className="text-3xl font-bold mb-2">My Skills</h2>
-          <div className="w-20 h-1 bg-primary mx-auto mb-6"></div>
-          <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            I've worked with a variety of technologies in the web development world.
-            Here's my tech stack and areas of expertise.
+          <h2 className="text-section-title font-display mb-6 text-accent-gradient">
+            Tech Stack & Expertise
+          </h2>
+          <div className="w-24 h-1 accent-gradient mx-auto mb-8 rounded-full"></div>
+          <p className="text-body-large text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Years of hands-on experience building modern web applications. 
+            Each technology represents real projects, solved challenges, and continuous learning.
           </p>
         </div>
         
-        {/* Interactive skill bubbles */}
-        <div className={`mb-16 transition-all duration-1000 ${showBubbles ? 'opacity-100' : 'opacity-0'}`}>
-          <AnimatedSkillBubbles />
-        </div>
-        
-        {/* Moving tech words background */}
-        <div className="absolute inset-0 overflow-hidden opacity-5 pointer-events-none select-none">
-          <div className="animate-marquee whitespace-nowrap text-4xl font-bold text-primary">
-            {skills.map(skill => (
-              <span key={skill.name} className="mx-4">{skill.name}</span>
-            ))}
-            {skills.map(skill => (
-              <span key={`repeat-${skill.name}`} className="mx-4">{skill.name}</span>
-            ))}
-          </div>
-        </div>
-        
-        {/* Category filters */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        {/* Category Filters */}
+        <div className="flex flex-wrap justify-center gap-3 mb-12">
           {categories.map((category) => (
             <button
               key={category}
-              className={`px-4 py-2 rounded-full text-sm transition-all relative overflow-hidden ${
+              className={`px-6 py-3 rounded-full font-medium transition-all duration-300 relative overflow-hidden group ${
                 activeCategory === category
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary hover:bg-secondary/70"
+                  ? "bg-primary text-primary-foreground shadow-lg shadow-primary/30"
+                  : "bg-card/60 text-foreground hover:bg-card/80 border border-white/10"
               }`}
               onClick={() => setActiveCategory(category)}
             >
               <span className="relative z-10">{category}</span>
               {activeCategory !== category && (
-                <span className="absolute inset-0 bg-primary/10 scale-x-0 hover:scale-x-100 transition-transform duration-300 origin-left"></span>
+                <div className="absolute inset-0 bg-gradient-to-r from-primary/20 to-accent/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
               )}
             </button>
           ))}
         </div>
         
-        {/* Skill cards grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+        {/* Tech Stack Grid */}
+        <div 
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 transition-all duration-1000 ${
+            isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
+          }`}
+        >
           {filteredSkills.map((skill, index) => (
-            <HoverCard key={skill.name} open={hoveredSkill === skill.name}>
-              <HoverCardTrigger asChild>
-                <Card 
-                  className={`hover:-translate-y-2 transition-all duration-300 cursor-pointer perspective ${
-                    isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-10"
-                  }`} 
-                  style={{ transitionDelay: `${index * 100}ms` }}
-                  onMouseEnter={() => handleSkillHover(skill.name)}
-                  onMouseLeave={() => handleSkillHover(null)}
-                >
-                  <CardContent className="p-6 flex flex-col items-center">
-                    <div className="relative mb-4">
-                      <div className="absolute inset-0 bg-primary/10 rounded-full blur-md"></div>
-                      <img src={skill.icon} alt={skill.name} className="w-16 h-16 relative z-10" />
-                    </div>
-                    <h3 className="text-lg font-semibold">{skill.name}</h3>
-                    
-                    <div className="w-full mt-4 bg-secondary rounded-full h-2 overflow-hidden">
-                      <div 
-                        className="bg-primary h-2 rounded-full relative"
-                        style={{ 
-                          width: isVisible ? `${skill.level}%` : "0%", 
-                          transition: "width 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)" 
-                        }}
-                      >
-                        <span className="absolute inset-0 bg-gradient-to-r from-primary/50 via-primary to-primary/50 animate-pulse"></span>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </HoverCardTrigger>
-              <HoverCardContent className="w-80 backdrop-blur-md bg-card/70 border border-primary/20">
-                <div className="flex justify-between items-center mb-2">
-                  <h4 className="font-semibold">{skill.name}</h4>
-                  <span className="text-xs font-mono bg-primary/10 px-2 py-1 rounded-full text-primary">{skill.level}%</span>
-                </div>
-                <p className="text-sm text-muted-foreground">{skill.description}</p>
-              </HoverCardContent>
-            </HoverCard>
+            <TechStackCard
+              key={skill.name}
+              {...skill}
+              index={index}
+            />
           ))}
+        </div>
+
+        {/* Summary Stats */}
+        <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6">
+          <div className="text-center block-card">
+            <div className="text-3xl font-display font-bold text-primary mb-2">6+</div>
+            <div className="text-muted-foreground font-medium">Years Experience</div>
+          </div>
+          <div className="text-center block-card">
+            <div className="text-3xl font-display font-bold text-accent mb-2">50+</div>
+            <div className="text-muted-foreground font-medium">Projects Built</div>
+          </div>
+          <div className="text-center block-card">
+            <div className="text-3xl font-display font-bold text-secondary mb-2">12</div>
+            <div className="text-muted-foreground font-medium">Technologies</div>
+          </div>
+          <div className="text-center block-card">
+            <div className="text-3xl font-display font-bold text-primary mb-2">∞</div>
+            <div className="text-muted-foreground font-medium">Learning</div>
+          </div>
         </div>
       </div>
     </section>
