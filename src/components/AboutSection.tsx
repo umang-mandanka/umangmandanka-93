@@ -82,7 +82,7 @@ const AboutSection = () => {
             </div>
 
             {/* Working Philosophy Card */}
-            <Card className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-blue-500/20 backdrop-blur-sm">
+            <Card className="bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-blue-500/20 backdrop-blur-sm mb-8">
               <CardContent className="p-6">
                 <h3 className="text-lg font-bold text-blue-400 mb-3 font-display">My Philosophy</h3>
                 <p className="text-gray-300 text-sm leading-relaxed">
@@ -91,35 +91,35 @@ const AboutSection = () => {
               </CardContent>
             </Card>
 
-             {/* Personal interests grid */}
-             <div className="mt-8">
-                <h3 className="text-card-title font-display text-white mb-4">Beyond the Screen</h3>
-                <div className="grid grid-cols-2 gap-4">
-                  {personalityTraits.map((trait, index) => (
-                    <PersonalityCard 
-                      key={index}
-                      icon={trait.icon}
-                      title={trait.title}
-                      description={trait.description}
-                      color={trait.color}
-                      index={index}
-                    />
-                  ))}
-                </div>
+            {/* Personal interests grid - moved below philosophy */}
+            <div className="mb-8">
+              <h3 className="text-card-title font-display text-white mb-4">Beyond the Screen</h3>
+              <div className="grid grid-cols-2 gap-4">
+                {personalityTraits.map((trait, index) => (
+                  <PersonalityCard 
+                    key={index}
+                    icon={trait.icon}
+                    title={trait.title}
+                    description={trait.description}
+                    color={trait.color}
+                    index={index}
+                  />
+                ))}
               </div>
+            </div>
 
-              {/* Notable achievement highlight */}
-              <div className="mt-8 p-6 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 border border-blue-500/20">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
-                  <span className="text-green-400 font-code text-sm">Currently Available</span>
-                </div>
-                <h4 className="text-white font-display text-lg mb-2">Let's Build Something Amazing</h4>
-                <p className="text-gray-400 text-sm">
-                  I'm currently taking on new projects and would love to hear about your next big idea. 
-                  Let's create something that users will remember.
-                </p>
+            {/* Notable achievement highlight - moved below personality cards */}
+            <div className="p-6 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 border border-blue-500/20">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
+                <span className="text-green-400 font-code text-sm">Currently Available</span>
               </div>
+              <h4 className="text-white font-display text-lg mb-2">Let's Build Something Amazing</h4>
+              <p className="text-gray-400 text-sm">
+                I'm currently taking on new projects and would love to hear about your next big idea. 
+                Let's create something that users will remember.
+              </p>
+            </div>
           </div>
           
           <div 
@@ -167,8 +167,6 @@ const AboutSection = () => {
                   </Card>
                 ))}
               </div>
-
-             
             </div>
           </div>
         </div>

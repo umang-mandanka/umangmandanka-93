@@ -141,14 +141,14 @@ const Index = () => {
       <ScrollTriggeredElement position="right" offset={1} />
       <FloatingCodeSnippet />
       
-      {/* Only a few background code particles */}
+      {/* Only a few background code particles - removed React/Tailwind references */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
         <div className="absolute top-1/4 left-1/3 w-3 h-3 rounded-full bg-cyan-400/40 blur-sm animate-floating"></div>
         <div className="absolute bottom-1/3 right-1/4 w-3 h-3 rounded-full bg-amber-400/40 blur-sm animate-floating" style={{animationDelay: "2.2s"}}></div>
         
-        {/* Just a couple code symbols */}
+        {/* Just a couple generic code symbols */}
         <div className="absolute top-2/3 right-1/5 text-blue-400/40 animate-floating text-2xl font-code" style={{animationDelay: "1.1s"}}>&lt;/&gt;</div>
-        <div className="absolute bottom-2/5 left-1/3 text-purple-400/40 animate-floating text-xl font-code" style={{animationDelay: "0.9s"}}>&lt;div&gt;</div>
+        <div className="absolute bottom-2/5 left-1/3 text-purple-400/40 animate-floating text-xl font-code" style={{animationDelay: "0.9s"}}>{'{ }'}</div>
       </div>
       
       {/* Reduced dynamic radial gradient */}

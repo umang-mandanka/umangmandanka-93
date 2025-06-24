@@ -28,7 +28,7 @@ const codeSnippets = [
   <img src="project.jpg" alt="Project" />
   <div class="card-overlay">
     <h3>Amazing Project</h3>
-    <p>React • Tailwind • Firebase</p>
+    <p>Vue • Node.js • MongoDB</p>
   </div>
 </div>`,
     position: { bottom: "15%", left: "8%" }
@@ -48,7 +48,6 @@ const FloatingCodeSnippet: React.FC<FloatingCodeProps> = ({ delay = 0 }) => {
       
       if (scrollPercentage > 0.2) setVisibleSnippets(prev => Array.from(new Set([...prev, 0])));
       if (scrollPercentage > 0.5) setVisibleSnippets(prev => Array.from(new Set([...prev, 1])));
-      if (scrollPercentage > 0.75) setVisibleSnippets(prev => Array.from(new Set([...prev, 2])));
     };
     
     window.addEventListener('scroll', handleScroll);
