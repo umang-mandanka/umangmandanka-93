@@ -1,8 +1,6 @@
-
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, Code, Braces, FileCode, Sparkles, MousePointer2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import "@/styles/matrix.css";
 
 const HeroSection = () => {
   const [text, setText] = useState("");
