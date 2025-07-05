@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,7 +8,6 @@ import { Mail, Send, MessageCircle, Calendar, Zap, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AvailabilityStatus from "@/components/AvailabilityStatus";
 import CalendarScheduling from "@/components/CalendarScheduling";
-import SocialProofIntegration from "@/components/SocialProofIntegration";
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -26,7 +24,7 @@ const ContactSection = () => {
 
   const projectTypes = [
     "Website Development",
-    "Web Application",
+    "Web Application", 
     "E-commerce Store",
     "Landing Page",
     "Dashboard/Admin Panel",
@@ -322,11 +320,6 @@ const ContactSection = () => {
               </CardContent>
             </Card>
           </div>
-        </div>
-
-        {/* Social Proof Section */}
-        <div className="mt-16">
-          <SocialProofIntegration />
         </div>
       </div>
     </section>
