@@ -19,7 +19,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Code, ArrowRight, ExternalLink, Github } from "lucide-react";
+import { Code, ArrowRight, ExternalLink, Github, X } from "lucide-react";
 import useScrollReveal from "@/hooks/useScrollReveal";
 
 interface Project {
@@ -106,6 +106,11 @@ const ProjectSection = () => {
     setIsDialogOpen(true);
   };
 
+  const handleCloseDialog = () => {
+    setIsDialogOpen(false);
+    setSelectedProject(null);
+  };
+
   return (
     <section id="projects" className="py-20 bg-muted/30 relative overflow-hidden">
       {/* Background elements */}
@@ -181,11 +186,19 @@ const ProjectSection = () => {
         </div>
 
         <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <AlertDialogContent className="max-w-3xl backdrop-blur-md bg-card/70 border border-primary/20">
+          <AlertDialogContent className="max-w-3xl backdrop-blur-md bg-card/70 border border-primary/20 relative">
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="absolute right-4 top-4 z-50 h-8 w-8 rounded-full bg-background/80 hover:bg-background"
+              onClick={handleCloseDialog}
+            >
+              <X className="h-4 w-4" />
+            </Button>
             {selectedProject && (
               <>
                 <AlertDialogHeader>
-                  <AlertDialogTitle className="text-2xl font-bold">{selectedProject.title}</AlertDialogTitle>
+                  <AlertDialogTitle className="text-2xl font-bold pr-12">{selectedProject.title}</AlertDialogTitle>
                   <AlertDialogDescription>
                     <div className="my-4">
                       <img 

@@ -1,4 +1,3 @@
-
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -10,7 +9,6 @@ import TestimonialsSection from "@/components/TestimonialsSection";
 import FooterCursor from "@/components/FooterCursor";
 import AnimatedSvgElements from "@/components/AnimatedSvgElements";
 import ScrollTriggeredElement from "@/components/ScrollTriggeredElement";
-import FloatingCodeSnippet from "@/components/FloatingCodeSnippet";
 import { useEffect, useState, useRef } from "react";
 
 const Index = () => {
@@ -139,7 +137,6 @@ const Index = () => {
       <AnimatedSvgElements />
       <ScrollTriggeredElement position="left" offset={0} />
       <ScrollTriggeredElement position="right" offset={1} />
-      <FloatingCodeSnippet />
       
       {/* Only a few background code particles - removed React/Tailwind references */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
