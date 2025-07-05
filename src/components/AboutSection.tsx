@@ -73,7 +73,7 @@ const AboutSection = () => {
             <div className="relative mb-8">
               <div className="bg-gradient-to-tr from-blue-500/20 to-purple-500/20 absolute -inset-4 rounded-xl blur-xl"></div>
               <div className="relative z-10 overflow-hidden rounded-lg border-[3px] border-gray-800">
-                <TiltProfileImage imageUrl="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" />
+                <TiltProfileImage imageUrl="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" />
               </div>
               
               {/* Code elements floating around image */}
@@ -108,12 +108,8 @@ const AboutSection = () => {
               </div>
             </div>
 
-            {/* Notable achievement highlight - moved below personality cards */}
+            {/* Simple availability status - removed offline card */}
             <div className="p-6 rounded-xl bg-gradient-to-r from-blue-500/10 via-purple-500/10 to-cyan-500/10 border border-blue-500/20">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse"></div>
-                <span className="text-green-400 font-code text-sm">Currently Available</span>
-              </div>
               <h4 className="text-white font-display text-lg mb-2">Let's Build Something Amazing</h4>
               <p className="text-gray-400 text-sm">
                 I'm currently taking on new projects and would love to hear about your next big idea. 
