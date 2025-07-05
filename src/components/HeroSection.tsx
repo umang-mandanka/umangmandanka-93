@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from "react";
 import { ArrowRight, Code, Braces, FileCode, Sparkles, MousePointer2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,7 +12,6 @@ const HeroSection = () => {
   const [currentShowcase, setCurrentShowcase] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
-  const codeFlowRef = useRef<HTMLDivElement>(null);
   
   // Text typing animation
   useEffect(() => {
@@ -55,19 +55,6 @@ const HeroSection = () => {
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, []);
-  
-  // Scroll effect
-  useEffect(() => {
-    const handleScroll = () => {
-      if (codeFlowRef.current) {
-        const scrollY = window.scrollY;
-        codeFlowRef.current.style.transform = `translateY(${scrollY * 0.2}px)`;
-      }
-    };
-    
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Rotating showcase content
@@ -156,31 +143,6 @@ const HeroSection = () => {
         id="matrix-container"
         className="absolute inset-0 overflow-hidden pointer-events-none opacity-20"
       ></div>
-      
-      {/* Code flow background */}
-      <div 
-        ref={codeFlowRef}
-        className="absolute inset-0 opacity-25 pointer-events-none overflow-hidden z-0"
-      >
-        <div className="animate-code-flow whitespace-nowrap">
-          {Array.from({length: 10}).map((_, rowIndex) => (
-            <div key={rowIndex} className="font-code text-xs leading-loose pl-4" style={{
-              opacity: 0.5 + Math.random() * 0.5,
-              color: rowIndex % 2 === 0 ? `hsl(${(rowIndex * 20) % 360}, 70%, 70%)` : '#ffcc00'
-            }}>
-              {`import { useState, useEffect } from 'react';`} <br/>
-              {`const Component = () => {`} <br/>
-              {`  const [state, setState] = useState(null);`} <br/>
-              {`  useEffect(() => {`} <br/>
-              {`    // Frontend code implementation`} <br/>
-              {`    fetch('/api/data').then(res => res.json());`} <br/>
-              {`  }, []);`} <br/>
-              {`  return <div className="flex items-center">Content</div>;`} <br/>
-              {`};`} <br/>
-            </div>
-          ))}
-        </div>
-      </div>
       
       {/* Grid Background */}
       <div 
