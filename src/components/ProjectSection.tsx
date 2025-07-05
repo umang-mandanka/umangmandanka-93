@@ -199,19 +199,21 @@ const ProjectSection = () => {
               <>
                 <AlertDialogHeader>
                   <AlertDialogTitle className="text-2xl font-bold pr-12">{selectedProject.title}</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    <div className="my-4">
-                      <img 
-                        src={selectedProject.image} 
-                        alt={selectedProject.title} 
-                        className="w-full h-64 object-cover rounded-md" 
-                      />
-                    </div>
-                    <p className="text-foreground my-4 text-lg">{selectedProject.longDescription}</p>
-                    <div className="flex flex-wrap gap-2 my-4">
-                      {selectedProject.tags.map((tag) => (
-                        <Badge key={tag} variant="outline" className="bg-primary/10">{tag}</Badge>
-                      ))}
+                  <AlertDialogDescription asChild>
+                    <div>
+                      <div className="my-4">
+                        <img 
+                          src={selectedProject.image} 
+                          alt={selectedProject.title} 
+                          className="w-full h-64 object-cover rounded-md" 
+                        />
+                      </div>
+                      <div className="text-foreground my-4 text-lg">{selectedProject.longDescription}</div>
+                      <div className="flex flex-wrap gap-2 my-4">
+                        {selectedProject.tags.map((tag) => (
+                          <Badge key={tag} variant="outline" className="bg-primary/10">{tag}</Badge>
+                        ))}
+                      </div>
                     </div>
                   </AlertDialogDescription>
                 </AlertDialogHeader>
