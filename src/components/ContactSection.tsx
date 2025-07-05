@@ -49,29 +49,71 @@ const ContactSection = () => {
     });
   };
 
+  const sendEmail = async (formData: any) => {
+    const emailContent = `
+      New Contact Form Submission:
+      
+      Name: ${formData.name}
+      Email: ${formData.email}
+      Subject: ${formData.subject}
+      Project Type: ${formData.projectType}
+      Budget: ${formData.budget}
+      Timeline: ${formData.timeline}
+      
+      Message:
+      ${formData.message}
+    `;
+
+    // Using EmailJS or similar service would be ideal, but for now we'll use mailto
+    const mailtoLink = `mailto:umangp737@gmail.com?subject=New Contact Form: ${formData.subject}&body=${encodeURIComponent(emailContent)}`;
+    window.location.href = mailtoLink;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate form submission
-    setTimeout(() => {
+    try {
+      // Send email notification
+      await sendEmail(formData);
+      
+      setTimeout(() => {
+        toast({
+          title: "Message Sent Successfully! 🚀",
+          description: "I'll get back to you within 24 hours. Thank you for reaching out!",
+        });
+        
+        setFormData({
+          name: "",
+          email: "",
+          subject: "",
+          message: "",
+          projectType: "",
+          budget: "",
+          timeline: ""
+        });
+        
+        setIsSubmitting(false);
+      }, 1000);
+    } catch (error) {
       toast({
-        title: "Message Sent Successfully! 🚀",
-        description: "I'll get back to you within 24 hours. Thank you for reaching out!",
+        title: "Error",
+        description: "There was an issue sending your message. Please try again.",
+        variant: "destructive",
       });
-      
-      setFormData({
-        name: "",
-        email: "",
-        subject: "",
-        message: "",
-        projectType: "",
-        budget: "",
-        timeline: ""
-      });
-      
       setIsSubmitting(false);
-    }, 1500);
+    }
+  };
+
+  const handleWhatsAppClick = () => {
+    const phoneNumber = "917600363306"; // India country code + your number
+    const message = "Hi! I'm interested in discussing a project with you.";
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, '_blank');
+  };
+
+  const handleEmailClick = () => {
+    window.location.href = "mailto:umangp737@gmail.com";
   };
 
   return (
@@ -222,11 +264,19 @@ const ContactSection = () => {
                 <div className="mt-6 pt-6 border-t border-gray-700">
                   <p className="text-gray-400 text-sm mb-3">Prefer a quicker chat?</p>
                   <div className="flex flex-wrap gap-3">
-                    <Badge variant="outline" className="bg-blue-500/20 text-blue-400 border-blue-500/30 cursor-pointer hover:bg-blue-500/30 transition-colors">
+                    <Badge 
+                      variant="outline" 
+                      className="bg-blue-500/20 text-blue-400 border-blue-500/30 cursor-pointer hover:bg-blue-500/30 transition-colors"
+                      onClick={handleEmailClick}
+                    >
                       <Mail size={12} className="mr-1" />
-                      umang@example.com
+                      umangp737@gmail.com
                     </Badge>
-                    <Badge variant="outline" className="bg-green-500/20 text-green-400 border-green-500/30 cursor-pointer hover:bg-green-500/30 transition-colors">
+                    <Badge 
+                      variant="outline" 
+                      className="bg-green-500/20 text-green-400 border-green-500/30 cursor-pointer hover:bg-green-500/30 transition-colors"
+                      onClick={handleWhatsAppClick}
+                    >
                       <MessageCircle size={12} className="mr-1" />
                       WhatsApp Chat
                     </Badge>
