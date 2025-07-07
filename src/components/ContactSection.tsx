@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,6 +9,7 @@ import { Mail, Send, MessageCircle, Calendar, Zap, Clock } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import AvailabilityStatus from "@/components/AvailabilityStatus";
 import CalendarScheduling from "@/components/CalendarScheduling";
+import emailjs from '@emailjs/browser';
 
 const ContactSection = () => {
   const { toast } = useToast();
@@ -48,23 +50,46 @@ const ContactSection = () => {
   };
 
   const sendEmail = async (formData: any) => {
-    const emailContent = `
-      New Contact Form Submission:
-      
-      Name: ${formData.name}
-      Email: ${formData.email}
-      Subject: ${formData.subject}
-      Project Type: ${formData.projectType}
-      Budget: ${formData.budget}
-      Timeline: ${formData.timeline}
-      
-      Message:
-      ${formData.message}
-    `;
+    // EmailJS configuration - you'll need to set these up in EmailJS dashboard
+    const serviceId = 'service_your_id'; // Replace with your EmailJS service ID
+    const templateId = 'template_your_id'; // Replace with your EmailJS template ID
+    const publicKey = 'your_public_key'; // Replace with your EmailJS public key
 
-    // Using EmailJS or similar service would be ideal, but for now we'll use mailto
-    const mailtoLink = `mailto:umangp737@gmail.com?subject=New Contact Form: ${formData.subject}&body=${encodeURIComponent(emailContent)}`;
-    window.location.href = mailtoLink;
+    const templateParams = {
+      from_name: formData.name,
+      from_email: formData.email,
+      subject: formData.subject,
+      project_type: formData.projectType,
+      budget: formData.budget,
+      timeline: formData.timeline,
+      message: formData.message,
+      to_email: 'umangp737@gmail.com'
+    };
+
+    try {
+      await emailjs.send(serviceId, templateId, templateParams, publicKey);
+      return true;
+    } catch (error) {
+      console.error('EmailJS error:', error);
+      // Fallback to mailto if EmailJS fails
+      const emailContent = `
+New Contact Form Submission:
+
+Name: ${formData.name}
+Email: ${formData.email}
+Subject: ${formData.subject}
+Project Type: ${formData.projectType}
+Budget: ${formData.budget}
+Timeline: ${formData.timeline}
+
+Message:
+${formData.message}
+      `;
+
+      const mailtoLink = `mailto:umangp737@gmail.com?subject=New Contact Form: ${formData.subject}&body=${encodeURIComponent(emailContent)}`;
+      window.location.href = mailtoLink;
+      return false;
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -72,33 +97,38 @@ const ContactSection = () => {
     setIsSubmitting(true);
 
     try {
-      // Send email notification
-      await sendEmail(formData);
+      const emailSent = await sendEmail(formData);
       
-      setTimeout(() => {
+      if (emailSent) {
         toast({
           title: "Message Sent Successfully! 🚀",
-          description: "I'll get back to you within 24 hours. Thank you for reaching out!",
+          description: "Your message has been sent directly to my inbox. I'll get back to you within 24 hours!",
         });
-        
-        setFormData({
-          name: "",
-          email: "",
-          subject: "",
-          message: "",
-          projectType: "",
-          budget: "",
-          timeline: ""
+      } else {
+        toast({
+          title: "Email Client Opened 📧",
+          description: "Please send the email from your email client to complete the submission.",
         });
-        
-        setIsSubmitting(false);
-      }, 1000);
+      }
+      
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        message: "",
+        projectType: "",
+        budget: "",
+        timeline: ""
+      });
+      
     } catch (error) {
+      console.error('Form submission error:', error);
       toast({
         title: "Error",
-        description: "There was an issue sending your message. Please try again.",
+        description: "There was an issue sending your message. Please try again or contact me directly.",
         variant: "destructive",
       });
+    } finally {
       setIsSubmitting(false);
     }
   };
