@@ -9,14 +9,13 @@ import {
   CardTitle 
 } from "@/components/ui/card";
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Code, ArrowRight, ExternalLink, Github, X } from "lucide-react";
@@ -185,21 +184,13 @@ const ProjectSection = () => {
           ))}
         </div>
 
-        <AlertDialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <AlertDialogContent className="max-w-3xl backdrop-blur-md bg-card/70 border border-primary/20 relative">
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="absolute right-4 top-4 z-50 h-8 w-8 rounded-full bg-background/80 hover:bg-background"
-              onClick={handleCloseDialog}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogContent className="max-w-3xl backdrop-blur-md bg-card/70 border border-primary/20">
             {selectedProject && (
               <>
-                <AlertDialogHeader>
-                  <AlertDialogTitle className="text-2xl font-bold pr-12">{selectedProject.title}</AlertDialogTitle>
-                  <AlertDialogDescription asChild>
+                <DialogHeader>
+                  <DialogTitle className="text-2xl font-bold">{selectedProject.title}</DialogTitle>
+                  <DialogDescription asChild>
                     <div>
                       <div className="my-4">
                         <img 
@@ -215,30 +206,28 @@ const ProjectSection = () => {
                         ))}
                       </div>
                     </div>
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
                   <div className="flex gap-4 w-full">
-                    <AlertDialogAction asChild>
-                      <Button className="w-full relative overflow-hidden group">
+                    <Button className="w-full relative overflow-hidden group" asChild>
+                      <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer">
                         <span className="relative z-10">Live Demo</span>
                         <span className="absolute inset-0 bg-primary/80 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                        <a href={selectedProject.liveUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0"></a>
-                      </Button>
-                    </AlertDialogAction>
-                    <AlertDialogAction asChild>
-                      <Button variant="outline" className="w-full relative overflow-hidden group">
+                      </a>
+                    </Button>
+                    <Button variant="outline" className="w-full relative overflow-hidden group" asChild>
+                      <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer">
                         <span className="relative z-10">View Code</span>
                         <span className="absolute inset-0 bg-primary/10 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></span>
-                        <a href={selectedProject.githubUrl} target="_blank" rel="noopener noreferrer" className="absolute inset-0"></a>
-                      </Button>
-                    </AlertDialogAction>
+                      </a>
+                    </Button>
                   </div>
-                </AlertDialogFooter>
+                </DialogFooter>
               </>
             )}
-          </AlertDialogContent>
-        </AlertDialog>
+          </DialogContent>
+        </Dialog>
       </div>
     </section>
   );

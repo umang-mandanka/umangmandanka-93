@@ -164,46 +164,6 @@ const HeroSection = () => {
         </div>
       </div>
       
-      {/* Interactive showcase cards - replacing terminal */}
-      <div className="absolute top-[15%] right-[10%] max-w-[320px]">
-        <div 
-          className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-md p-6 rounded-2xl border border-blue-500/20 transform transition-all duration-500 hover:scale-105 hover:border-blue-400/30"
-          style={{
-            transform: `rotateY(${mousePosition.x * 0.1}deg) rotateX(${-mousePosition.y * 0.1}deg)`,
-          }}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-400 animate-pulse"></div>
-              <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse" style={{animationDelay: '0.5s'}}></div>
-              <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" style={{animationDelay: '1s'}}></div>
-            </div>
-            <Sparkles className="w-4 h-4 text-blue-400" />
-          </div>
-          
-          <div className="transition-all duration-500">
-            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
-              {showcases[currentShowcase].title}
-              <MousePointer2 className="w-4 h-4 text-blue-400 animate-bounce" />
-            </h3>
-            <p className="text-blue-300 font-code text-sm">
-              {showcases[currentShowcase].subtitle}
-            </p>
-          </div>
-          
-          <div className="mt-4 flex gap-2">
-            {showcases.map((_, index) => (
-              <div
-                key={index}
-                className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                  index === currentShowcase ? 'bg-blue-400 w-6' : 'bg-gray-600'
-                }`}
-              />
-            ))}
-          </div>
-        </div>
-      </div>
-      
       {/* Main content area */}
       <div className="container mx-auto px-4 relative z-10">
         <div className="max-w-2xl" style={{ 
@@ -311,6 +271,46 @@ const HeroSection = () => {
                 <path d="M0 3v18h24v-18h-24zm21.518 2l-9.518 7.713-9.518-7.713h19.036zm-19.518 14v-11.817l10 8.104 10-8.104v11.817h-20z" />
               </svg>
             </a>
+          </div>
+        </div>
+      </div>
+      
+      {/* Interactive showcase cards - replacing terminal */}
+      <div className="absolute top-[15%] right-[10%] max-w-[320px]">
+        <div 
+          className="bg-gradient-to-br from-gray-900/60 to-gray-800/40 backdrop-blur-md p-6 rounded-2xl border border-blue-500/20 transform transition-all duration-500 hover:scale-105 hover:border-blue-400/30"
+          style={{
+            transform: `rotateY(${mousePosition.x * 0.1}deg) rotateX(${-mousePosition.y * 0.1}deg)`,
+          }}
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex gap-2">
+              <div className="w-3 h-3 rounded-full bg-red-400 animate-pulse"></div>
+              <div className="w-3 h-3 rounded-full bg-yellow-400 animate-pulse" style={{animationDelay: '0.5s'}}></div>
+              <div className="w-3 h-3 rounded-full bg-green-400 animate-pulse" style={{animationDelay: '1s'}}></div>
+            </div>
+            <Sparkles className="w-4 h-4 text-blue-400" />
+          </div>
+          
+          <div className="transition-all duration-500">
+            <h3 className="text-lg font-bold text-white mb-2 flex items-center gap-2">
+              {showcases[currentShowcase].title}
+              <MousePointer2 className="w-4 h-4 text-blue-400 animate-bounce" />
+            </h3>
+            <p className="text-blue-300 font-code text-sm">
+              {showcases[currentShowcase].subtitle}
+            </p>
+          </div>
+          
+          <div className="mt-4 flex gap-2">
+            {showcases.map((_, index) => (
+              <div
+                key={index}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  index === currentShowcase ? 'bg-blue-400 w-6' : 'bg-gray-600'
+                }`}
+              />
+            ))}
           </div>
         </div>
       </div>
